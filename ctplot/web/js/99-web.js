@@ -618,27 +618,49 @@ function initSubmit() {
         xhr = $.ajax({
             data : query,
             success : function(data) {
+                var saveButton,
+                    img = data.png;
+
                 result.empty();
-                var img = data.png;
+
                 $('<img>').attr('src', img)
                 // add query string to prevent browser
                 // from showing cached image
-                .attr('alt', query).appendTo(result);
+                    .attr('alt', query).appendTo(result);
 
                 // links to pdf and svg
                 p = $('<p>').appendTo(result);
                 p.append('Download als ');
-                $('<a>').attr('href', data.pdf).text('PDF').appendTo(p);
+                $('<a>').attr('href', data.pdf)
+                    .attr('target', '_blank').text('PDF').appendTo(p);
                 p.append(', ');
-                $('<a>').attr('href', data.svg).text('SVG').appendTo(p);
+                $('<a>').attr('href', data.svg)
+                    .attr('target', '_blank').text('SVG').appendTo(p);
+                p.append(', ');
+                $('<a>').attr('href', data.png)
+                    .attr('target', '_blank').text('PNG').appendTo(p);
+                p.append('&nbsp;');
+
+                // save plot button
+                saveButton = $('<button>').attr('type', 'button')
+                    .attr('title', 'Zu gespeicherten Diagrammen hinzufügen')
+                    .text(' Zu gespeicherten Diagrammen hinzufügen');
+                $('<img>').attr('src', 'img/disk.png').prependTo(saveButton);
+                
+                saveButton.click(function () {
+                    addPlotToSaved(settings);
+                    $(this).hide(speed);
+                    savePlots();
+                    scrollToElement('#savedplots');
+                }).appendTo(p);
 
                 // plot settings
-                result.append('<br>Einstellungen dieses Plots:<br>');
+                result.append('<h2>Einstellungen dieses Plots</h2>');
                 jsonsettings = JSON.stringify(settings);
                 result.append($('<textarea id="plotsettings">').text(jsonsettings));
 
                 // plot url
-                result.append('<br>Diesen Plot auf einer Webseite einbinden:<br>');
+                result.append('<h2>Diesen Plot auf einer Webseite einbinden</h2>');
                 ploturl = $(location).attr('href').replace(/[#?].*/, '') + 'plot?' + query.replace(/a=plot/, 'a=png');
                 result.append($('<textarea id="ploturl">').text('<img src="' + ploturl + '" />'));
 
@@ -646,13 +668,6 @@ function initSubmit() {
                 $.extend(settings, data);
                 // append plot image urls to
                 settings['url'] = ploturl;
-                // save plot button
-                p.append(', ');
-                $('<input>').attr('type', 'image').attr('src', 'img/disk.png').attr('title', 'Diagramm speichern').attr('value', 'Diagramm speichern').click(function() {
-                    addPlotToSaved(settings);
-                    $(this).hide(speed);
-                    savePlots();
-                }).appendTo(p);
 
                 // scroll to plot section
                 $('nav a[href="#output"]').click();
@@ -684,6 +699,13 @@ function initSymbols() {
     appendSymbol('label.required', '&diams;');
     appendSymbol('label.advanced', '&dagger;');
     appendSymbol('label.expert', '&Dagger;');
+}
+
+function scrollToElement(el) {
+    var pos = $(el).offset().top - 15;
+    $('html, body').animate({ 
+        scrollTop: (pos > 0 ? pos : 0)
+    }, 400);
 }
 
 /** on page load... */
