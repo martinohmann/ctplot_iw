@@ -41,6 +41,27 @@ Array.prototype.foreach = function(callback) {
 }
 var tables_and_vars = null;
 
+/** display warning if unsupported browser is used */
+function checkBrowserSupport() {
+    var unsupported = false;
+
+    /* Safari */
+    if (navigator.userAgent.indexOf('Safari') > -1 && 
+        navigator.userAgent.indexOf('Chrome') == -1) 
+    {
+        unsupported = true;
+    /* Internet Explorer */
+    } else if (navigator.userAgent.indexOf('MSIE') > -1) {
+        unsupported = true;
+    }
+
+    if (unsupported) {
+        $('#browser-warning').show();
+    } else {
+        $('#browser-warning').remove();
+    }
+}
+
 /** get available HDF5 from server and return new DOM element */
 function sourcesBox() {
     console.debug('* sourcesbox');
@@ -668,6 +689,7 @@ function initSymbols() {
 /** on page load... */
 $(function() {
     console.debug('* main');
+    checkBrowserSupport();
     initScroll();
     initHelp('fieldset.global');
     initHelp('fieldset.global2');
