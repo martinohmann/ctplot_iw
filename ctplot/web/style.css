@@ -219,10 +219,6 @@ label {
     padding: .2em;
 }
 
-label:hover {
-    background: #ffa;
-}
-
 /*label.required:before {
  content: "\2666\2009";
  }
