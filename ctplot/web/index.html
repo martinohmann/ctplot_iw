@@ -24,6 +24,7 @@
         <meta charset="utf-8">
         <link rel="stylesheet" type="text/css" href="style.css" />
         <link rel="stylesheet" type="text/css" href="colorbox.css" />
+        <link rel="stylesheet" type="text/css" href="colorpicker.css" />
         <script src="js"></script>
     </head>
     <body>
@@ -130,7 +131,7 @@
                               </label>
                               <h2>Achsen und Variablen</h4>
                               <label class="required" data-help="Wert, der auf der x-Achse dargestellt werden soll. Hier kann ein Variablenname eingegeben werden (z.B. time) oder eine Formel, die Variablen umrechnet oder miteinander verknüpft (z.B. T_a-T_i oder log(p))"> x-Variable
-                                  <input type="text" name="x*">
+                                  <select name="x*"></select>
                               </label>
                               <label data-help="Unterteilung der x-Achse in Bins. Angabe einer Zahl n bedeutet, dass automatisch n Bins gewählt werden, die die Daten enthalten (z.B. 10 erzeugt 10 Bins). Angabe von drei durch Komma getrennten Zahlen a,b,n erzeugt n Bins mit linker Kante a und rechter Kante b. Angabe von mehr als drei durch Komma getrennten Zahlen erzeugt Bins mit den Binkanten auf den angegebenen Werten" class="t-h1 t-h2 t-p advanced"> x-Bins
                                   <input type="text" name="x*b">
@@ -139,7 +140,7 @@
                                   <input type="checkbox" name="o*xerr">
                               </label>
                               <label data-help="Wert, der auf der y-Achse dargestellt werden soll, analog zu x" class="required t-xy t-h2 t-p t-map">y-Variable
-                                  <input type="text" name="y*">
+                                  <select name="y*"></select>
                               </label>
                               <label data-help="Unterteilung der y-Achse in Bins, analog zu x-Bins" class="t-h2 advanced">y-Bins
                                   <input type="text" name="y*b">
@@ -154,7 +155,7 @@
                                       <option value="y">y-Achse</option>
                                   </select> </label>
                               <label data-help="Wert, der auf der z-Achse dargestellt werden soll, analog zu x, die Werte werden als Farbe der Datenpunkte dargestellt" class="t-xy t-map">z-Variable
-                                  <input type="text" name="z*">
+                                  <select name="z*"></select>
                               </label>
                               <h2 class="advanced" >Daten-Filter (Schnitt)</h4>
                               <!--
@@ -208,8 +209,8 @@
                                       <option value="1">links -&gt; rechts</option>
                                       <option value="-1">rechts -&gt; links</option>
                                   </select> </label>
-                              <label data-help="Farbe der Linie/Datenpunkte (r=rot, g=grün, b=blau, y=gelb, m=magenta, c=cyan, k=schwarz oder Angabe als Hex-RGB-Tupel: #rrggbb)" class="t-xy t-h1 t-p t-map expert">Farbe
-                                  <input type="text" name="o*color">
+                              <label data-help="Farbe der Linie/Datenpunkte" class="t-xy t-h1 t-p t-map expert">Farbe
+                                  <input type="hidden" name="o*color">
                               </label>
                               <label data-help="Durchsichtigkeit der Linie/Datenpunke (0=transparent, 1=opak)" class="t-xy t-h1 t-h2 t-p t-map expert">Transparenz
                                   <input type="text" name="o*alpha">

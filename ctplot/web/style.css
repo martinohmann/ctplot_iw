@@ -226,7 +226,7 @@ button img {
     vertical-align: top;
 }
 
-input[type="text"], select, textarea {
+.container input[type="text"], .container select, .container textarea {
     font-family: monospace;
     font-size: 100%;
     border: 1px solid #aaa;
@@ -247,7 +247,7 @@ input[type="text"], select, textarea {
     font-size: 100%;
 }
 
-textarea {
+.container textarea {
     height: 6em;
     width: 100%;
     padding: 0.4em;
@@ -279,7 +279,8 @@ label {
     color: gray;
 }
 
-input[type="text"]:focus, select:focus {
+.container input[type="text"]:focus, 
+.container select:focus {
     border: 1px solid rgb(0, 122, 204);
 }
 
@@ -341,6 +342,23 @@ label .help {
     clear: both;
     text-align: center;
     padding: 1em 0;
+}
+
+.colorselector {
+    position: relative;
+    left: -4px;
+    width: 36px;
+    height: 36px;
+    background: url(img/colorpicker/select2.png);
+}
+
+.colorselector div {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 28px;
+    height: 28px;
+    background: url(img/colorpicker/select2.png) center;
 }
 
 #varsbox {

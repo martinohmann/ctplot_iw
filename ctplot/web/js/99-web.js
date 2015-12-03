@@ -226,11 +226,47 @@ function updateHiddenFields() {
     hide(hidden);
 }
 
+/** update axis dropdown contents for given plot */
+function updateAxisVarsDropdowns(plot) {
+    plot.find(':input[name^="x"],:input[name^="y"],:input[name^="z"]').each(function() {
+        // only apply if input is a select box 
+        if ($(this).is('select')) {
+            var dropdown = $(this),
+                p = $(this).parents('.plot'),
+                k = p.find('select[name^="s"]').val(),
+                option;
+
+            dropdown.empty().append('<option></option>');
+
+            $.each(tables_and_vars, function(kk, vv) {
+                if (kk == k) {
+                    for ( i = 0; i < vv[1].length; ++i) {
+                        option = $('<option>');
+                        option.val(vv[1][i]);
+                        if (vv[2][i].length > 0) {
+                            option.text(vv[1][i] + ' [' + vv[2][i] + ']');
+                        } else {
+                            option.text(vv[1][i]);
+                        }
+                        dropdown.append(option)
+                    }
+                    if (p.find(':input[name^="rw"]').val().replace(/\s+/, '') != '') {
+                        dropdown.append('<option value="rate">rate</option>');
+                        dropdown.append('<option value="count">count</option>');
+                        dropdown.append('<option value="weight">weight</option>');
+                    }
+                    return false;
+                }
+            });
+        }
+    });
+}
+
 /** add interactive handlers */
 function addHandlers(plot) {
     console.debug('* add handlers');
     // display available vars on certain input fields
-    plot.find(':input[name^="x"],:input[name^="y"],:input[name^="z"],:input[name^="c"]').focusin(function() {
+    plot.find(':input[name^="c"]').focusin(function() {
         p = $(this).parents('.plot');
         k = p.find('select[name^="s"]').val();
         $.each(tables_and_vars, function(kk, vv) {
@@ -251,6 +287,30 @@ function addHandlers(plot) {
         });
     }).focusout(function() {
         $('#varsbox').hide();
+    });
+
+    // add colorpicker
+    plot.find(':input[name$="color"]').each(function() {
+      var input = $(this),
+          parent = input.parent(),
+          picker = $('<div class="colorselector"><div></div></div>')
+              .attr('title', parent.data('help'));
+
+      picker.appendTo(parent).ColorPicker({
+          color: '#0000ff',
+          onShow: function (cp) {
+              $(cp).fadeIn(500);
+              return false;
+          },
+          onHide: function (cp) {
+              $(cp).fadeOut(500);
+              return false;
+          },
+          onChange: function (hsb, hex, rgb) {
+              input.val('#' + hex);
+              picker.find('div').css('backgroundColor', '#' + hex);
+          }
+      });
     });
 
     // delete plot button
@@ -274,10 +334,20 @@ function addHandlers(plot) {
         updateHiddenFields();
     });
 
-    // experiment/datasets
+    // experiment
     plot.find(':input[name^="experiment"]').change(function() {
+        console.log('experiment changed');
         updateHiddenFields();
-        $(this).parents('.datasetselector').find(':input[name^="s"] option:first').prop('selected', true);
+        var selector = $(this).parents('.datasetselector')
+          .find(':input[name^="s"] option:first').prop('selected', true);
+        updateAxisVarsDropdowns(plot);
+    });
+
+    // datasets
+    plot.find(':input[name^="s"]').change(function() {
+        console.log('set changed');
+        updateHiddenFields();
+        updateAxisVarsDropdowns(plot);
     });
 
     updateHiddenFields();
@@ -319,17 +389,40 @@ function getSettings() {
 }
 
 function setSettings(s) {
+    var axis = {};
     console.debug('* set settings');
-    $('.plot').remove();
-    for (var i = 0; i < s.plots; ++i)
+
+    for (var i = 0; i < s.plots; ++i) {
         addPlot();
+    }
+
     $.each(s, function(k, v) {
-        field = $(':input[name="' + k + '"]');
-        if (field.is(':checkbox'))
-            field.prop('checked', v);
-        else
-            field.val(v);
+        if (k.match(/^[xyz][0-9]+$/)) {
+            axis[k] = v;
+        } else {
+            field = $(':input[name="' + k + '"]');
+            if (field.is(':checkbox')) {
+                field.prop('checked', v);
+            } else {
+                field.val(v);
+            }
+        }
     });
+
+    var plots = $('.plot');
+
+    /* since we know the dataset now, we can populate the 
+     *  axis select boxes */
+    plots.each(function () {
+        updateAxisVarsDropdowns($(this));
+    });
+
+    /* select the axis values */
+    $.each(axis, function(k, v) {
+        var field = $(':input[name="' + k + '"]');
+        field.val(v);
+    });
+
     updateHiddenFields();
 }
 
