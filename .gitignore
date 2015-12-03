@@ -1,1 +1,3 @@
 *.pyc
+__version__.py
+ctplot.egg-info/
