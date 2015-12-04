@@ -428,34 +428,37 @@ label .help {
     display: inline-block;
     vertical-align: top;
     position: relative;
-    margin: 1em 0 0 1em;
-    min-width: 5em;
-    min-height: 5em;
-    border: 1px solid #aaa;
-}
-
-#savedplots > div:hover {
-    border: 1px solid #007acc;
+    padding: 5px;
+    width: 20%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 #savedplots .savedplot {
-    height: 8em;
-    max-width: 20em;
+    border: 1px solid #aaa;
+    width: 100%;
+    height: auto;
     -ms-interpolation-mode: bicubic;
 }
 
+#savedplots > div:hover .savedplot {
+    border: 1px solid #007acc;
+}
+
+
 #savedplots .delete, #savedplots .loadplot {
     position: absolute;
-    top: 3px;
+    top: 8px;
     background: rgba(255, 255, 255, 0.8);
 }
 
 #savedplots .delete {
-    right: 3px;
+    right: 8px;
 }
 
 #savedplots .loadplot {
-    right: 22px;
+    right: 27px;
 }
 
 @media all and (max-width: 1000px) {
@@ -476,6 +479,9 @@ label .help {
     }
     nav ul li {
       padding: .8em 0;
+    }
+    #savedplots > div {
+      width: 25%;
     }
 }
 
@@ -505,6 +511,9 @@ label .help {
       text-align: left;
       display: block;
       margin: .5em 0;
+    }
+    #savedplots > div {
+      width: 33.3%;
     }
 }
 

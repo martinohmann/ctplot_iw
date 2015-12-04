@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   "use strict";
 
     var speed = 'fast',
-        scrollOffset = -30,
+        scrollOffset = -40,
         templatePlot,
         xhr;
 
@@ -796,7 +796,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         addPlotToSaved(settings);
                         $(this).hide(speed);
                         savePlots();
-                        scrollToElement('#savedplots');
+                        checkSavedPlotsAvail();
+                        $('nav a[href="#saved"]').click();
                     }).appendTo(right);
 
                     $('<img>').attr('src', 'img/disk.png').prependTo(saveButton);
@@ -861,14 +862,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         appendSymbol('label.required', '&diams;');
         appendSymbol('label.advanced', '&dagger;');
         appendSymbol('label.expert', '&Dagger;');
-    }
-
-    function scrollToElement(el) {
-        var pos = $(el).offset().top - scrollOffset;
-
-        $('html, body').animate({ 
-            scrollTop: (pos > 0 ? pos : 0)
-        }, 400);
     }
 
     /** on page load... */
