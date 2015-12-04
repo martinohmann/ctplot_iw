@@ -311,6 +311,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
               picker = $('<div class="colorselector"><div></div></div>')
                   .attr('title', parent.data('help'));
 
+          // remove cloned selector
+          parent.find('.colorselector').remove();
+
           picker.appendTo(parent).ColorPicker({
               color: '#0000ff',
               onShow: function (cp) {
@@ -603,7 +606,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         });
 
         loadPlots();
-        checkSavedPlotsAvail();
     }
 
     function checkSavedPlotsAvail() {
@@ -651,10 +653,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             },
             success : function(o, status, xhr) {
                 if (o && o.savedPlots) {
-                  $.each(o.savedPlots, function(i, s) {
-                      addPlotToSaved(s);
-                  });
+                    $.each(o.savedPlots, function(i, s) {
+                        addPlotToSaved(s);
+                    });
                 }
+                checkSavedPlotsAvail();
             }
         });
     }
