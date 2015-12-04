@@ -397,7 +397,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             if (field.is(':checkbox')) {
                 s[name] = field.prop('checked');
             } else {
-                val = field.val();
                 s[name] = field.val();
             }
         });
@@ -407,7 +406,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     function setSettings(s) {
         console.debug('* set settings');
-        var axis = {}, i, plots;
+        var axis = {}, i, plots, field;
 
         for (i = 0; i < s.plots; ++i) {
             addPlot();
@@ -651,9 +650,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 id : getSessionID(),
             },
             success : function(o, status, xhr) {
-                $.each(o.savedPlots, function(i, s) {
-                    addPlotToSaved(s);
-                });
+                if (o && o.savedPlots) {
+                  $.each(o.savedPlots, function(i, s) {
+                      addPlotToSaved(s);
+                  });
+                }
             }
         });
     }
@@ -722,8 +723,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     function initSubmit() {
         console.debug('* init submit');
         // hand submission of plot request and reception of the plot
-        $('form').submit(function() {
-            var result, settings;
+        $('form').submit(function(e) {
+            e.preventDefault();
+            var query, result, settings;
 
             try {
                 xhr.abort();
@@ -755,7 +757,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     var saveButton, p, container, 
                         left, right, 
                         list, el,
-                        img = data.png;
+                        img = data.png,
+                        jsonSettings,
+                        plotUrl;
 
                     result.empty();
 
@@ -799,21 +803,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     // plot settings
                     container.append('<h2>Einstellungen dieses Plots</h2>');
-                    jsonsettings = JSON.stringify(settings);
+                    jsonSettings = JSON.stringify(settings);
                     p = $('<p>').appendTo(container);
-                    $('<textarea id="plotsettings">').text(jsonsettings).appendTo(p);
+                    $('<textarea id="plotsettings">').text(jsonSettings).appendTo(p);
 
                     // plot url
                     container.append('<h2>Diesen Plot auf einer Webseite einbinden</h2>');
-                    ploturl = $(location).attr('href').replace(/[#?].*/, '') + 'plot?' + query.replace(/a=plot/, 'a=png');
+                    plotUrl = $(location).attr('href').replace(/[#?].*/, '') + 'plot?' + query.replace(/a=plot/, 'a=png');
                     p = $('<p>').appendTo(container);
-                    $('<textarea id="ploturl">').text('<img src="' + ploturl + '" />').appendTo(p);
+                    $('<textarea id="ploturl">').text('<img src="' + plotUrl + '" />').appendTo(p);
 
                     // store settings in cookie
                     $.extend(settings, data);
 
                     // append plot image urls to
-                    settings['url'] = ploturl;
+                    settings['url'] = plotUrl;
 
                     // scroll to plot section
                     $('nav a[href="#output"]').click();
