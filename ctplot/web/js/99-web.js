@@ -514,21 +514,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         // detach navbar on scroll down
         $(window).scroll(function() {
             var scroll = $(this).scrollTop(),
-                nav = $('nav:not(.fixed)'),
-                navoffset = 0, pos;
+                nav = $('nav'),
+                header = $('header'),
+                pos,
+                navOffset = header.offset().top + 
+                  header.outerHeight();
 
-            if (nav.size() > 0) {
-                navoffset = nav.offset().top;
-            }
-            if (scroll > navoffset) {
-                $('nav').addClass('fixed').next()
+            if (scroll > navOffset) {
+                nav.addClass('fixed').next()
                   .css('margin-top', $('nav').height());
             } else {
-                $('nav').removeClass('fixed').next()
+                nav.removeClass('fixed').next()
                   .css('margin-top', '0');
             }
 
-            pos = scroll + $('nav').height();
+            pos = scroll + nav.height();
 
             $('nav a').removeClass('active').each(function() {
                 var target = $(this).attr('href'),
