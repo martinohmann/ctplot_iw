@@ -17,10 +17,6 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-html {
-    font-size: 100.01%;
-}
-
 body {
     /*font-family: "Droid Serif", serif;*/
     font-family: Arial,Helvetica,sans-serif;
@@ -53,7 +49,7 @@ footer {
 h1, h2, h3, h4, h5, h6 {
     color: #007acc;
     margin: 0;
-    padding: 1.3em 0 .2em 0;
+    padding: 1em 0 .2em 0;
 }
 
 h1, fieldset legend {
@@ -290,7 +286,7 @@ label .help {
 }
 
 .global {
-    max-width: 94.1%;
+    max-width: 100%;
     vertical-align: top;
 }
 
@@ -313,7 +309,7 @@ label .help {
 
 .plot {
     display: inline-block;
-    width: 22%;
+    width: 22.9%;
     vertical-align: top;
     position: relative;
 }
@@ -448,10 +444,15 @@ label .help {
       padding: 1.1em 0;
     }
     fieldset.global, fieldset.plot {
-        width: 90%;
+        width: auto;
+        display: block;
     }
     .global label {
         width: 100%;
+    }
+    #addplot {
+        display: block;
+        margin: 1em auto;
     }
 }
 

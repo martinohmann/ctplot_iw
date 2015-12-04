@@ -125,7 +125,7 @@ function renumberPlots() {
     ch = $('#plots').children('.plot');
     ch.each(function(i) {
         plot = $(this);
-        plot.find('legend').text('Diagramm ' + (i + 1));
+        plot.find('legend').text((i + 1) + '. Datenreihe');
         plot.find('[name]').each(function() {
             e = $(this);
             e.attr('name', e.attr('name').replace(/\*|\d/, '' + i));
@@ -236,7 +236,8 @@ function updateAxisVarsDropdowns(plot) {
                 k = p.find('select[name^="s"]').val(),
                 option;
 
-            dropdown.empty().append('<option></option>');
+            dropdown.empty();
+            dropdown.append('<option value=""></option>');
 
             $.each(tables_and_vars, function(kk, vv) {
                 if (kk == k) {
@@ -452,8 +453,11 @@ var templatePlot;
 
 function initPlots() {
     console.debug('* init plots');
-    // add source dropdown box to plot template, filled with available hdf5 data files
-    sourcesBox().prependTo('.plot');
+    /* add source dropdown box to plot template, filled with available hdf5 data files
+     * add it after the diagram name, which is the first label 
+     * inside the container */
+    var datasetHeading = $('.plot label:first');
+    datasetHeading.after(sourcesBox());
     // detach the plot template (to be added by pressing 'add plot' button)
     templatePlot = $('.plot').detach();
 
