@@ -24,7 +24,8 @@ $.ajaxSetup({
     type : 'post'
 });
 
-var speed = 'fast';
+var speed = 'fast',
+    scrollOffset = -30;
 
 /** add .startsWith() function to string */
 if ( typeof String.prototype.startsWith != 'function') {
@@ -495,7 +496,7 @@ function initScroll() {
     console.debug('* init scroll');
     // let navbar smoothscroll
     $('nav a').smoothScroll({
-        offset : -15
+        offset : scrollOffset
     });
 
     // detach navbar on scroll down
@@ -579,6 +580,17 @@ function initSavedPlots() {
         }
     });
     loadPlots();
+    checkSavedPlotsAvail();
+}
+
+function checkSavedPlotsAvail() {
+    var savedPlots = $('#savedplots .savedplot').length;
+
+    if (savedPlots > 0) {
+        $('#nosavedplots').hide();
+    } else {
+        $('#nosavedplots').show();
+    }
 }
 
 function savePlots() {
@@ -641,18 +653,29 @@ function bindColorbox() {
 
 function addPlotToSaved(settings) {
     console.debug('* add plot to saved');
-    $('<div>').appendTo('#savedplots').append($('<img src="' + settings.url + '" href="' + settings.url + '" title="' + settings.t + '">').addClass('savedplot').data('settings', settings))
-    // add delete button
-    .append($('<img>').attr('src', 'img/cross.png').attr('title', 'Plot löschen').addClass('delete').click(function() {
+    var plotImg = $('<img src="' + settings.url + '" href="' + settings.url + '" title="' + settings.t + '">'),
+      delBtn = $('<img>').attr('src', 'img/cross.png').attr('title', 'Plot löschen'),
+      loadBtn = $('<img>').attr('src', 'img/arrow_redo.png').attr('title', 'Plot laden');
+
+    delBtn.addClass('delete').click(function() {
         $(this).parent().remove();
         bindColorbox();
         savePlots();
-    }))
-    // add load button
-    .append($('<img>').attr('src', 'img/arrow_redo.png').attr('title', 'Plot laden').addClass('loadplot').click(function() {
+        checkSavedPlotsAvail();
+    });
+
+    loadBtn.addClass('loadplot').click(function() {
         setSettings($(this).parent().find('.savedplot').data('settings'));
         $('form').submit();
-    }));
+    })
+    
+    plotImg.addClass('savedplot').data('settings', settings);
+
+    $('<div>').appendTo('#savedplots').append(plotImg)
+      // add delete button
+      .append(delBtn)
+      // add load button
+      .append(loadBtn);
 
     bindColorbox();
 }
@@ -704,7 +727,7 @@ function initSubmit() {
 
         result = $('#result');
         // print status information
-        result.empty().append('<p>Plot wird erstellt, bitte warten&hellip;</p><img src="img/bar90.gif">');
+        result.empty().append('<p class="text-centered">Plot wird erstellt, bitte warten&hellip;<br /><img src="img/bar90.gif"></p>');
 
         // scroll to plot section
         $('nav a[href="#output"]').click();
@@ -715,7 +738,9 @@ function initSubmit() {
         xhr = $.ajax({
             data : query,
             success : function(data) {
-                var saveButton,
+                var saveButton, p, container, 
+                    left, right, 
+                    list, el,
                     img = data.png;
 
                 result.empty();
@@ -725,41 +750,53 @@ function initSubmit() {
                 // from showing cached image
                     .attr('alt', query).appendTo(result);
 
-                // links to pdf and svg
-                p = $('<p>').appendTo(result);
-                p.append('Download als ');
-                $('<a>').attr('href', data.pdf)
-                    .attr('target', '_blank').text('PDF').appendTo(p);
-                p.append(', ');
-                $('<a>').attr('href', data.svg)
-                    .attr('target', '_blank').text('SVG').appendTo(p);
-                p.append(', ');
-                $('<a>').attr('href', data.png)
-                    .attr('target', '_blank').text('PNG').appendTo(p);
-                p.append('&nbsp;');
+                // links to pdf, png and svg
+                container = $('<fieldset class="actions">').appendTo(result);
+                $('<legend>Plot</legend>').appendTo(container);
+                left = $('<div class="left">').appendTo(container);
+                left.append('Diagramm herunterladen als:');
+                right = $('<div class="right">').appendTo(container);
+                list = $('<ul>').appendTo(left);
+                el = $('<li>').appendTo(list);
+
+                // container.appendTo(result);
+                // var p = $('<p>').appendTo(result);
+                // p.append('Download als ');
+                createInternalLink(data.pdf, 'PDF')
+                    .attr('target', '_blank').appendTo(el);
+                el = $('<li>').appendTo(list);
+                createInternalLink(data.svg, 'SVG')
+                    .attr('target', '_blank').appendTo(el);
+                el = $('<li>').appendTo(list);
+                createInternalLink(data.png, 'PNG')
+                    .attr('target', '_blank').appendTo(el);
+                // p.append('&nbsp;');
 
                 // save plot button
                 saveButton = $('<button>').attr('type', 'button')
                     .attr('title', 'Zu gespeicherten Diagrammen hinzufügen')
                     .text(' Zu gespeicherten Diagrammen hinzufügen');
-                $('<img>').attr('src', 'img/disk.png').prependTo(saveButton);
                 
                 saveButton.click(function () {
                     addPlotToSaved(settings);
                     $(this).hide(speed);
                     savePlots();
                     scrollToElement('#savedplots');
-                }).appendTo(p);
+                }).appendTo(right);
+
+                $('<img>').attr('src', 'img/disk.png').prependTo(saveButton);
 
                 // plot settings
-                result.append('<h2>Einstellungen dieses Plots</h2>');
+                container.append('<h2>Einstellungen dieses Plots</h2>');
                 jsonsettings = JSON.stringify(settings);
-                result.append($('<textarea id="plotsettings">').text(jsonsettings));
+                p = $('<p>').appendTo(container);
+                $('<textarea id="plotsettings">').text(jsonsettings).appendTo(p);
 
                 // plot url
-                result.append('<h2>Diesen Plot auf einer Webseite einbinden</h2>');
+                container.append('<h2>Diesen Plot auf einer Webseite einbinden</h2>');
                 ploturl = $(location).attr('href').replace(/[#?].*/, '') + 'plot?' + query.replace(/a=plot/, 'a=png');
-                result.append($('<textarea id="ploturl">').text('<img src="' + ploturl + '" />'));
+                p = $('<p>').appendTo(container);
+                $('<textarea id="ploturl">').text('<img src="' + ploturl + '" />').appendTo(p);
 
                 // store settings in cookie
                 $.extend(settings, data);
@@ -770,8 +807,10 @@ function initSubmit() {
                 $('nav a[href="#output"]').click();
             },
             error : function(xhr, text, error) {
+                var errorbox = $('<div class="errorbox">');
                 $('#result').empty();
-                $('#error').html('<p>plot error, check input values!</p>' + '<p>"' + text + '"</p><p>"' + error + '"</p>' + '<p style="color: red;">responseText:</p>' + xhr['responseText']);
+                errorbox.html('<p>Fehler beim Erstellen des Plots. Bitte Ploteinstellungen überprüfen.</p>' + '<p>Fehlertext: "' + text + '"</p>');
+                $('#error').html(errorbox);
                 // scroll to plot section
                 $('nav a[href="#output"]').click();
             }
@@ -779,6 +818,13 @@ function initSubmit() {
 
         return false;
     });
+}
+
+function createInternalLink(href, text) {
+  var link = $('<a class="LinkElementInternal">');
+  link.append('<span class="arrow">');
+  link.attr('href', href).append(text);
+  return link;
 }
 
 function appendSymbol(selector, symbol) {
@@ -799,7 +845,7 @@ function initSymbols() {
 }
 
 function scrollToElement(el) {
-    var pos = $(el).offset().top - 15;
+    var pos = $(el).offset().top - scrollOffset;
     $('html, body').animate({ 
         scrollTop: (pos > 0 ? pos : 0)
     }, 400);

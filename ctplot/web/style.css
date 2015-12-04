@@ -38,11 +38,11 @@ noscript {
 }
 
 footer {
-    margin-top: 10em;
+    margin-top: 2em;
     border-top: 1px solid rgb(105, 105, 105);
     font-size: 90%;
     text-align: right;
-    padding: 1em 0;
+    padding: 1em;
     color: rgb(105, 105, 105);
 }
 
@@ -171,11 +171,29 @@ a.LinkElementInternal span.arrow {
 }
 
 #browser-warning {
+    display: none;
+}
+
+.errorbox {
     background: #FFBBBB;
-    padding: 10px;
+    padding: 1em;
     border: 1px solid #FF8A8A;
     color: #444444;
-    display: none;
+    margin: .5em 0;
+}
+
+.errorbox a {
+  color: #000000;
+  text-decoration: underline;
+}
+
+.errorbox a:active,
+.errorbox a:hover {
+  color: #555555;
+}
+
+.text-centered {
+  text-align: center;
 }
 
 a {
@@ -205,7 +223,8 @@ a:hover {
 
 #content p {
     margin: 0;
-    padding: 1em 0 0 0;
+    padding: .5em 0;
+    line-height: 1.5em;
 }
 
 fieldset {
@@ -244,10 +263,11 @@ button img {
 }
 
 .container textarea {
-    height: 6em;
+    height: 8em;
     width: 100%;
     padding: 0.4em;
     margin: 0 0 0.5em 0;
+    resize: vertical;
 }
 
 select {
@@ -370,15 +390,38 @@ label .help {
     z-index: 5;
 }
 
-#result {
-    text-align: center;
-}
-
 #result > img {
     display: block;
     margin: 1em auto;
     max-width: 95%;
     -ms-interpolation-mode: bicubic;
+}
+
+#result .actions .left,
+#result .actions .right {
+  width: 50%;
+  display: inline-block;
+  float: none;
+  margin: 0;
+}
+
+#result .actions .right {
+  text-align: right;
+}
+
+#result .actions ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+#result .actions li {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+#nosavedplots {
+  font-style: italic;
 }
 
 #savedplots > div {
@@ -442,6 +485,8 @@ label .help {
     }
     nav ul li {
       padding: 1.1em 0;
+      display: inline-block;
+      vertical-align: middle;
     }
     fieldset.global, fieldset.plot {
         width: auto;
@@ -453,6 +498,13 @@ label .help {
     #addplot {
         display: block;
         margin: 1em auto;
+    }
+    #result .actions .left,
+    #result .actions .right {
+      width: 100%;
+      text-align: left;
+      display: block;
+      margin: .5em 0;
     }
 }
 
