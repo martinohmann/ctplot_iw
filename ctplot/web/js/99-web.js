@@ -673,8 +673,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     function addPlotToSaved(settings) {
         console.debug('* add plot to saved');
         var plotImg = $('<img src="' + settings.url + '" href="' + settings.url + '" title="' + settings.t + '">'),
-          delBtn = $('<img>').attr('src', 'img/cross.png').attr('title', 'Plot löschen'),
-          loadBtn = $('<img>').attr('src', 'img/arrow_redo.png').attr('title', 'Plot laden');
+            delBtn = $('<img>').attr('src', 'img/cross.png').attr('title', 'Plot löschen'),
+            loadBtn = $('<img>').attr('src', 'img/arrow_redo.png').attr('title', 'Plot laden');
 
         delBtn.addClass('delete').click(function() {
             $(this).parent().remove();
@@ -684,6 +684,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         });
 
         loadBtn.addClass('loadplot').click(function() {
+            /* clear plots first */
+            $('.plot').find('.delplot').click();
             setSettings($(this).parent().find('.savedplot').data('settings'));
             $('form').submit();
         })
@@ -691,7 +693,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         plotImg.addClass('savedplot').data('settings', settings);
 
         $('<div>').appendTo('#savedplots').append(plotImg)
-          .append(delBtn).append(loadBtn);
+            .append(delBtn).append(loadBtn);
 
         bindColorbox();
     }
