@@ -311,29 +311,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         // add colorpicker
         plot.find(':input[name$="color"]').each(function() {
-          var input = $(this),
-              parent = input.parent(),
-              picker = $('<div class="colorselector"><div></div></div>')
-                  .attr('title', parent.data('help'));
+            var input = $(this),
+                parent = input.parent(),
+                picker = $('<div class="colorselector"><div></div></div>')
+                    .attr('title', parent.data('help'));
 
-          // remove cloned selector
-          parent.find('.colorselector').remove();
+            // remove cloned selector
+            parent.find('.colorselector').remove();
 
-          picker.appendTo(parent).ColorPicker({
-              color: '#0000ff',
-              onShow: function (cp) {
-                  $(cp).fadeIn(500);
-                  return false;
-              },
-              onHide: function (cp) {
-                  $(cp).fadeOut(500);
-                  return false;
-              },
-              onChange: function (hsb, hex, rgb) {
-                  input.val('#' + hex);
-                  picker.find('div').css('backgroundColor', '#' + hex);
-              }
-          });
+            picker.appendTo(parent).ColorPicker({
+                onShow: function (cp) {
+                    $(cp).fadeIn(500);
+                    return false;
+                },
+                onHide: function (cp) {
+                    $(cp).fadeOut(500);
+                    return false;
+                },
+                onChange: function (hsb, hex, rgb) {
+                    input.val('#' + hex);
+                    picker.find('div').css('background-color', '#' + hex);
+                }
+            });
+
+            input.change(function () {
+                try {
+                    var color = input.val();
+                    picker.ColorPickerSetColor(color.substring(1));
+                    picker.find('div').css('background-color', color);
+                } catch(e) {}
+            });
         });
 
         // delete plot button
@@ -438,7 +445,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         /* since we know the dataset now, we can populate the 
          * axis select boxes */
         plots.each(function () {
-            updateAxisVarsDropdowns($(this));
+            var plot = $(this);
+            updateAxisVarsDropdowns(plot);
+            /* force colorpicker update */
+            plot.find(':input[name$="color"]').change();
         });
 
         /* select the axis values */
@@ -686,16 +696,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             btnContainer = $('<span class="btns">');
 
         delBtn.addClass('delete').click(function() {
-            $(this).parent().remove();
+            $(this).closest('div').remove();
             bindColorbox();
             savePlots();
             checkSavedPlotsAvail();
         });
 
         loadBtn.addClass('loadplot').click(function() {
+            var plot = $(this).closest('div').find('.savedplot');
             /* clear plots first */
             $('.plot').find('.delplot').click();
-            setSettings($(this).parent().find('.savedplot').data('settings'));
+            setSettings(plot.data('settings'));
             $('form').submit();
         })
         
@@ -756,7 +767,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             result = $('#result');
             
             // print status information
-            result.empty().append('<p class="text-centered">Plot wird erstellt, bitte warten&hellip;<br /><img src="img/bar90.gif"></p>');
+            result.empty().append('<p class="text-centered">Plot wird erstellt, bitte warten&hellip;<br /><br /><img src="img/bar90.gif"></p>');
             $('#error').empty();
 
             // scroll to plot section

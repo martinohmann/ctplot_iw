@@ -305,6 +305,10 @@ label {
     color: #007700;
 }
 
+.wobble-fix { 
+  -webkit-filter: blur(0); 
+}
+
 .btn {
   display: inline-block;
   padding: 3px 10px;
