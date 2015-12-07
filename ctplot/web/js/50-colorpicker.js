@@ -163,7 +163,8 @@
 					cal: $(this).parent(),
 					pos: $(this).offset()
 				};
-				current.preview = current.cal.data('colorpicker').livePreview;
+        ev.data = current;
+        moveSelector(ev);
 				$(document).bind('mouseup', current, upSelector);
 				$(document).bind('mousemove', current, moveSelector);
 			},
