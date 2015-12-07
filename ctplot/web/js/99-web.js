@@ -850,9 +850,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     function createInternalLink(href, text) {
-        var link = $('<a class="LinkElementInternal">');
-        link.append('<span class="arrow">');
-        return link.attr('href', href).append(text);
+        var link = $('<a class="link-internal">');
+        return link.attr('href', href).html(text);
     }
 
     function appendSymbol(selector, symbol) {

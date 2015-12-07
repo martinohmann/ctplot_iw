@@ -23,7 +23,7 @@ body {
     font-size: 12px;
     margin: 0;
     padding: 0;
-    background: url("http://www.desy.de/++resource++desy/images/bg.jpg");
+    background: url(img/bg.jpg);
 }
 
 noscript {
@@ -137,23 +137,24 @@ nav ul li:last-child {
     border: none;
 }
 
-a.LinkElementInternal {
+a.internal-link {
     color: #696969;
     display: inline;
     text-decoration: none;
 }
 
-a.LinkElementInternal:hover,
-a.LinkElementInternal:active
-a.LinkElementInternal:focus {
+a.internal-link:hover,
+a.internal-link:active
+a.internal-link:focus {
     color: #e89700;
     display: inline;
     text-decoration: none;
 }
 
 
-a.LinkElementInternal span.arrow {
-    background-image: url('http://physik-begreifen-zeuthen.desy.de/++resource++desy/images/internal_link.gif');
+a.internal-link:before {
+    content: "";
+    background-image: url(img/internal_link.gif);
     background-position: left center;
     background-repeat: no-repeat;
     width: 12px;
