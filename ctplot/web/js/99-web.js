@@ -681,8 +681,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     function addPlotToSaved(settings) {
         console.debug('* add plot to saved');
         var plotImg = $('<img src="' + settings.url + '" href="' + settings.url + '" title="' + settings.t + '">'),
-            delBtn = $('<img>').attr('src', 'img/cross.png').attr('title', 'Plot löschen'),
-            loadBtn = $('<img>').attr('src', 'img/arrow_redo.png').attr('title', 'Plot laden');
+            delBtn = $('<i class="fa fa-close fa-2x icon-red"></i>').attr('title', 'Plot löschen'),
+            loadBtn = $('<i class="fa fa-repeat fa-2x icon-green"></i>').attr('title', 'Plot laden'),
+            btnContainer = $('<span class="btns">');
 
         delBtn.addClass('delete').click(function() {
             $(this).parent().remove();
@@ -700,8 +701,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         
         plotImg.addClass('savedplot').data('settings', settings);
 
-        $('<div>').appendTo('#savedplots').append(plotImg)
-            .append(delBtn).append(loadBtn);
+        btnContainer.append(loadBtn).append(delBtn);
+
+        $('<div>').appendTo('#savedplots').append(plotImg).append(btnContainer);
 
         bindColorbox();
     }
@@ -788,19 +790,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     el = $('<li>').appendTo(list);
 
                     // links to pdf, png and svg
-                    createInternalLink(data.pdf, 'PDF')
-                        .attr('target', '_blank').appendTo(el);
+                    $('<a>').attr('href', data.pdf)
+                        .addClass('btn')
+                        .attr('target', '_blank')
+                        .text(' PDF')
+                        .prepend('<i class="fa fa-file-pdf-o"></i>')
+                        .appendTo(el);
                     el = $('<li>').appendTo(list);
-                    createInternalLink(data.svg, 'SVG')
-                        .attr('target', '_blank').appendTo(el);
+                    $('<a>').attr('href', data.svg)
+                        .addClass('btn')
+                        .attr('target', '_blank')
+                        .text(' SVG')
+                        .prepend('<i class="fa fa-file-text-o"></i>')
+                        .appendTo(el);
                     el = $('<li>').appendTo(list);
-                    createInternalLink(data.png, 'PNG')
-                        .attr('target', '_blank').appendTo(el);
+                    $('<a>').attr('href', data.png)
+                        .addClass('btn')
+                        .attr('target', '_blank')
+                        .text(' PNG')
+                        .prepend('<i class="fa fa-file-image-o"></i>')
+                        .appendTo(el);
 
                     // save plot button
                     saveButton = $('<button>').attr('type', 'button')
+                        .addClass('btn')
                         .attr('title', 'Zu gespeicherten Diagrammen hinzufügen')
-                        .text(' Zu gespeicherten Diagrammen hinzufügen');
+                        .text(' Zu gespeicherten Diagrammen hinzufügen')
+                        .prepend('<i class="fa fa-save"></i>');
                     
                     saveButton.click(function () {
                         addPlotToSaved(settings);
@@ -810,7 +826,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         $('nav a[href="#saved"]').click();
                     }).appendTo(right);
 
-                    $('<img>').attr('src', 'img/disk.png').prependTo(saveButton);
+                    // $('<img>').attr('src', 'img/disk.png').prependTo(saveButton);
 
                     // plot settings
                     container.append('<h2>Einstellungen dieses Plots</h2>');
@@ -850,7 +866,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     function createInternalLink(href, text) {
-        var link = $('<a class="link-internal">');
+        var link = $('<a class="internal-link">');
         return link.attr('href', href).html(text);
     }
 

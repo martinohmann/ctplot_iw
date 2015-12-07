@@ -248,7 +248,7 @@ button img {
     font-size: 100%;
     border: 1px solid #aaa;
     background: white;
-    height: 1.7em;
+    height: 2em;
     padding: 0 0.4em;
     vertical-align: middle;
     -webkit-box-shadow: inset 0.75em 0.75em 0.75em -0.75em #ccc;
@@ -297,6 +297,63 @@ label {
     color: gray;
 }
 
+.icon-red {
+    color: #ff2200;
+}
+
+.icon-green {
+    color: #007700;
+}
+
+.btn {
+  display: inline-block;
+  padding: 3px 10px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  background-image: none;
+  background: #007ACC;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #fff;
+  text-decoration: none;
+  outline: none;
+}
+
+.btn:active,
+.btn:hover {
+  background: #118ADD;
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn.btn-secondary {
+  background: #353535;
+}
+
+.btn.btn-secondary:active,
+.btn.btn-secondary:hover {
+  background: #464646;
+}
+
+.btn > .fa {
+  margin-right: 2px;
+}
+
 .container input[type="text"]:focus, 
 .container select:focus {
     border: 1px solid rgb(0, 122, 204);
@@ -334,8 +391,9 @@ label .help {
 
 .plot .delplot {
     position: absolute;
-    top: 1em;
-    right: .5em;
+    top: .5em;
+    right: .25em;
+    cursor: pointer;
 }
 
 #addplot {
@@ -374,6 +432,7 @@ label .help {
     height: 28px;
     background: url(img/colorpicker/select2.png) center;
 }
+
 
 #varsbox {
     position: fixed;
@@ -415,7 +474,7 @@ label .help {
 }
 #result .actions li {
   display: inline-block;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 #nosavedplots {
@@ -431,6 +490,7 @@ label .help {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    font-size: 0;
 }
 
 #savedplots .savedplot {
@@ -438,25 +498,40 @@ label .help {
     width: 100%;
     height: auto;
     -ms-interpolation-mode: bicubic;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-#savedplots > div:hover .savedplot {
+#savedplots > div:hover .savedplot,
+#savedplots > div:hover .btns {
     border: 1px solid #007acc;
 }
 
-
 #savedplots .delete, #savedplots .loadplot {
-    position: absolute;
-    top: 8px;
-    background: rgba(255, 255, 255, 0.8);
+    position: relative;
+    cursor: pointer;
+}
+
+#savedplots .btns {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  padding: 1px 6px;
+  border: 1px solid #aaa;
+  background: #fff;
+  -webkit-border-top-left-radius: 8px;
+  -moz-border-radius-topleft: 8px;
+  border-top-left-radius: 8px;
 }
 
 #savedplots .delete {
-    right: 8px;
+    font-size: 28px;
 }
 
 #savedplots .loadplot {
-    right: 27px;
+    margin-right: 8px;
+    font-size: 24px;
 }
 
 @media all and (max-width: 1000px) {
@@ -512,6 +587,14 @@ label .help {
     }
     #savedplots > div {
       width: 33.3%;
+    }
+
+    #savedplots .delete {
+        font-size: 24px;
+    }
+
+    #savedplots .loadplot {
+        font-size: 20px;
     }
 }
 

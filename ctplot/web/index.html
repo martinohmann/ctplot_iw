@@ -23,9 +23,10 @@
         <title>PlotTool</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <link rel="stylesheet" type="text/css" href="style.css" />
-        <link rel="stylesheet" type="text/css" href="colorbox.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="colorpicker.css" />
+        <link rel="stylesheet" type="text/css" href="colorbox.css" />
+        <link rel="stylesheet" type="text/css" href="style.css" />
         <script src="js"></script>
     </head>
     <body>
@@ -88,7 +89,7 @@
                                 <legend>
                                     *. Datenreihe
                                 </legend>
-                                <img src="img/cross.png" class="delplot" title="hier klicken, um diese Diagrammeinstellungen zu entfernen">
+                                <span class="fa fa-close fa-2x icon-red delplot" title="hier klicken, um diese Diagrammeinstellungen zu entfernen"></span>
                                 <h2>Datenauswahl</h2>
                                 <label class="advanced" data-help="Name des Diagramms, wird in der Legende angezeigt">Bezeichnung
                                     <input type="text" name="n*">
@@ -273,7 +274,9 @@
                                     <input type="text" name="fl*">
                                 </label>
                             </fieldset>
-                            <button type="button" id="addplot" title="hier klicken, um einen weiteres, unabhängiges Diagramm hinzuzufügen"><img src="img/add.png"> Datenreihe hinzufügen
+                            <button type="button" id="addplot" class="btn" title="hier klicken, um einen weiteres, unabhängiges Diagramm hinzuzufügen">
+                              <i class="fa fa-plus-square"></i>
+                              Datenreihe hinzufügen
                             </button>
                         </div>
 
@@ -406,9 +409,13 @@
                         </fieldset>
                         <div class="buttons">
                             <input type="hidden" name="a" value="plot">
-                            <button type="reset" title="hier klicken, um alle Diagrammeinstellungen zurückzusetzen"><img src="img/arrow_undo.png"> Reset
+                            <button class="btn btn-secondary" type="reset" title="hier klicken, um alle Diagrammeinstellungen zurückzusetzen">
+                              <i class="fa fa-undo"></i>
+                              Reset
                             </button>
-                            <button type="submit"><img src="img/chart_line.png"> Diagramm erstellen
+                            <button class="btn" type="submit">
+                              <i class="fa fa-bar-chart"></i>
+                              Diagramm erstellen
                             </button>
                         </div>
                     </form>
@@ -428,8 +435,8 @@
                     <h1>Gespeicherte Diagramme</h1>
                     <p>
                         Gespeicherte Diagramme und ihre Einstellungen können
-                        mit einem Klick auf <img src="img/arrow_redo.png">
-                        geladen und auf <img src="img/cross.png"> gelöscht
+                        mit einem Klick auf <i class="fa fa-repeat fa-lg icon-green"></i> 
+                        geladen und auf <i class="fa fa-close fa-lg icon-red"></i> gelöscht
                         werden. Ein Klick auf das Bild, vergrößert es.
                     </p>
                     <p id="nosavedplots">
@@ -445,7 +452,12 @@
                     </p>
                     <p>
                         <textarea name="settingstoload"></textarea>
-                        <button type="button" name="load">Einstellungen laden</button>
+                    </p>
+                    <p>
+                        <button class="btn" type="button" name="load">
+                          <i class="fa fa-upload"></i> 
+                          Einstellungen laden
+                        </button>
                     </p>
                 </div>
                 <div id="session">
@@ -474,8 +486,14 @@
                         <label>Session-ID
                             <input type="text" id="sessionid">
                         </label>
-                        <button type="button" id="newid">neue ID</button>
-                        <button type="button" id="loadid">Session laden</button>
+                        <button class="btn" type="button" id="newid">
+                          <i class="fa fa-refresh"></i> 
+                          neue ID
+                        </button>
+                        <button class="btn" type="button" id="loadid">
+                          <i class="fa fa-upload"></i> 
+                          Session laden
+                        </button>
                     </p>
                 </div>
             </div>
