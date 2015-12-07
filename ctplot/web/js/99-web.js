@@ -249,7 +249,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     option, i;
 
                 dropdown.empty();
-                dropdown.append('<option value=""></option>');
+
+                if (dropdown.attr('name').match(/^z/)) {
+                    dropdown.append('<option value="">optional</option>');
+                } else {
+                    dropdown.append('<option value=""></option>');
+                }
 
                 $.each(tables_and_vars, function(kk, vv) {
                     if (kk == k) {

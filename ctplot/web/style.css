@@ -65,6 +65,7 @@ h2 {
 h3 {
     font-size: 100%;
     font-weight: bold;
+    color: #555;
 }
 
 h4, fieldset label {
@@ -312,14 +313,10 @@ label .help {
 
 .global label {
     display: inline-block;
-    width: 32.5%;
+    width: 24.5%;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-}
-
-.global2 label {
-    width: 24.5%;
 }
 
 .global label input[type="text"], .global label select {
@@ -342,7 +339,7 @@ label .help {
 
 #addplot {
     display: inline-block;
-    margin: 10em 0em 0em 3em;
+    margin: 1em 0 0 .25em;
 }
 
 .plot label {
