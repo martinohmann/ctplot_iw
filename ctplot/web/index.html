@@ -230,7 +230,6 @@
                                 </label>
                                 <label data-help="Durchsichtigkeit der Linie/Datenpunke (0=transparent, 1=opak)" class="t-xy t-h1 t-h2 t-p t-map expert">Transparenz
                                     <select name="o*alpha">
-                                        <option value=""></option>
                                         <option value="1">0%</option>
                                         <option value="0.9">10%</option>
                                         <option value="0.8">20%</option>
@@ -245,10 +244,9 @@
                                     </select> </label>
                                 <label data-help="Darstellung der Datenunkte" class="t-xy t-h1 t-p t-map expert">Symbol für Datenpunkte
                                     <select name="o*marker">
-                                        <option value=""></option>
-                                        <option value="none">kein Marker</option>
+                                        <option value="">kein Symbol</option>
                                         <option value=",">Pixel</option>
-                                        <option value=".">Punkt</option>
+                                        <option value="." selected="selected">Punkt</option>
                                         <option value="o">Kreis</option>
                                         <option value="*">Stern</option>
                                         <option value="s">Quadrat</option>
@@ -261,7 +259,6 @@
                                 </label>
                                 <label data-help="Darstellung der Linie" class="t-xy t-h1 t-p t-map expert">Linientyp
                                     <select name="o*linestyle">
-                                        <option value=""></option>
                                         <option value="none">keine Linie</option>
                                         <option value="-">durchgezogen</option>
                                         <option value="--">gestrichelt</option>
