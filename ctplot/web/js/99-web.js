@@ -48,22 +48,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     /** display warning if unsupported browser is used */
     function checkBrowserSupport() {
-        var unsupported = false;
+        var supported = false;
 
-        /* Safari */
+        /* Chromium/Google Chrome */
         if (navigator.userAgent.indexOf('Safari') > -1 && 
-            navigator.userAgent.indexOf('Chrome') == -1) 
+            navigator.userAgent.indexOf('Chrome') > -1) 
         {
-            unsupported = true;
-        /* Internet Explorer */
-        } else if (navigator.userAgent.indexOf('MSIE') > -1) {
-            unsupported = true;
+            supported = true;
+        /* Mozilla Firefox */
+        } else if (navigator.userAgent.indexOf('Firefox') > -1) {
+            supported = true;
         }
 
-        if (unsupported) {
-            $('#browser-warning').show();
-        } else {
+        if (supported) {
             $('#browser-warning').remove();
+        } else {
+            $('#browser-warning').show();
         }
     }
 
