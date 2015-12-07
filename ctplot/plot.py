@@ -516,7 +516,7 @@ class Plot(object):
 
         # legend
         plt.axes(self.axes.values()[-1])  # activate last added axes
-        if self.l != 'none' and len(self.legend) > 1 and 'map' not in self.m :
+        if self.l != 'none' and 'map' not in self.m :
             lines = [v[0] for v in self.legend]
             labels = [v[1] for v in self.legend]
             leg = plt.legend(lines, labels, loc = self.l or 'best', fancybox = True)
@@ -1022,11 +1022,11 @@ def display_progress(p):
 def display_settings_help():
     print '''available plot settings
 ===========================
-    
+
 Settings containing a # may appear multiple times, once per graph.
 The # is to be replaced by an integer starting with 0.
 
-t    
+t
 w
 h
 s#
