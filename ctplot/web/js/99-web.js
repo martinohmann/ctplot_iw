@@ -49,16 +49,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     /** display warning if unsupported browser is used */
     function checkBrowserSupport() {
-        var supported = false;
+        var body = $('body'),
+          supported = false;
 
         /* Chromium/Google Chrome */
         if (navigator.userAgent.indexOf('Safari') > -1 && 
             navigator.userAgent.indexOf('Chrome') > -1) 
         {
             supported = true;
+            body.addClass('chrome');
         /* Mozilla Firefox */
         } else if (navigator.userAgent.indexOf('Firefox') > -1) {
             supported = true;
+            body.addClass('firefox');
         }
 
         if (supported) {
@@ -136,7 +139,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         ch.each(function(i) {
             var plot = $(this);
-
             plot.find('legend').text((i + 1) + '. Datenreihe');
             plot.find('[name]').each(function() {
                 var e = $(this);
@@ -697,10 +699,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             btnContainer = $('<span class="btns">');
 
         delBtn.addClass('delete').click(function() {
-            $(this).closest('div').remove();
-            bindColorbox();
-            savePlots();
-            checkSavedPlotsAvail();
+            var container = $(this).closest('div');
+            container.animate({ 'opacity' : 0, 'width': 0, 'padding': 0 }, 500, function () {
+                container.remove();
+                bindColorbox();
+                savePlots();
+                checkSavedPlotsAvail();
+            });
         });
 
         loadBtn.addClass('loadplot').click(function() {
