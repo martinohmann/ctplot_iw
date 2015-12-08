@@ -682,7 +682,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     function bindColorbox() {
         console.debug('* bind colorbox');
-        $('#savedplots .savedplot').unbind().colorbox({
+        var plots = $('#savedplots .savedplot');
+        plots.colorbox.remove();
+        plots.colorbox({
             photo : true,
             maxWidth : '90%',
             maxHeight : '90%',
