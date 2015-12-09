@@ -14,19 +14,19 @@
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import numpy as np
 import dateutil.parser as dp
 
-_safe_globals = {"__builtins__":None}
+_safe_globals = { "__builtins__": None, "__import__": None }
 _safe_locals = {}
 
-#add any needed builtins back in. 
+#add any needed builtins back in.
 for k in []:
     _safe_locals[k] = eval(k)
 
-# numpy functions    
+# numpy functions
 for k, v in np.__dict__.iteritems():
     _safe_locals[k] = getattr(np, k)
 

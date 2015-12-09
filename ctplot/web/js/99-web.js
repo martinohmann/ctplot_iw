@@ -93,6 +93,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 $.each(data, function(id, info) {
                     // console.debug(id+' -- '+info);
                     var m = id.match(/(.*):(.*)/);
+                    console.log(m);
                     // filename incl. path
                     var file = m[1];
                     // filename only, w/o path and extension
@@ -103,7 +104,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     // add a selectable option for this dataset and table
                     var opt = $('<option>').text(filename + ' - ' + info[0]).val(id).appendTo(datasetbox);
 
-                    var experiment = file.match(/(.+?\/)*(.*?)\/.+?/)[2];
+                    var experiment = file.match(/(.*?)\/.+?/)[1];
                     console.debug('experiment = ' + experiment + ' / ' + id);
                     opt.addClass('ex-' + experiment);
                     if (experimentbox.find('option').filter(function() {
@@ -744,9 +745,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             target = $(':input[name="'+target+'"]');
             target.val(target.val()+', '+input.val());
             
-            if(target.val().match(/^\s*,\s*$/)) {
-                target.val('');
-            }
             console.debug(target.attr('name')+' = '+target.val());
         });
     }

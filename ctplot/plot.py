@@ -16,7 +16,7 @@ from itertools import product
 from safeeval import safeeval
 from locket import lock_file
 
-logging.basicConfig(level = logging.ERROR, format = '%(filename)s:%(funcName)s:%(lineno)d:%(message)s')
+logging.basicConfig(level = logging.DEBUG, format = '%(filename)s:%(funcName)s:%(lineno)d:%(message)s')
 
 log = logging.getLogger('plot')
 
@@ -28,6 +28,7 @@ TableSpecs = namedtuple('TableSpecs', ('title', 'colnames', 'units', 'rows'))
 
 def available_tables(d = os.path.dirname(__file__) + '/data'):
     files = []
+    dirlen = len(d)
     for p, d, f in os.walk(d):
         for ff in f:
             files.append(path.join(p, ff))
@@ -41,7 +42,7 @@ def available_tables(d = os.path.dirname(__file__) + '/data'):
         try:
             h5 = tables.openFile(f, 'r')
             for n in h5.walkNodes(classname = 'Table'):
-                tab = f + ':' + n._v_pathname
+                tab = f[dirlen+1:] + ':' + n._v_pathname
                 tabs[tab] = TableSpecs(n._v_title, n.colnames, json.loads(n.attrs.units), int(n.nrows))
             h5.close()
         except:
@@ -200,7 +201,7 @@ class Plot(object):
 
         # source with rate averaging
         for i, s in enumerate(self.s):
-            self._append('sr', '{}:{}:{}:{}'.format(s, self.rw[i], self.rs[i], self.rc[i]) if s else None)
+            self._append('sr', '{}:{}:{}:{}'.format(path.join(config['datadir'], s), self.rw[i], self.rs[i], self.rc[i]) if s else None)
 
         self.legend = []
         self.textboxes = []
@@ -233,7 +234,6 @@ class Plot(object):
         # prefilled with empty lists
         expr_data = {}
         joined_cuts = {}  # OR of all cuts
-        log.debug('self.sr={}'.format(self.sr))
         for n, s in enumerate(self.sr):
             if s:
                 if s not in expr_data:
@@ -288,7 +288,6 @@ class Plot(object):
             ss = s.strip().split(':')
             with tables.openFile(ss[0], 'r') as h5:
                 table = h5.getNode(ss[1])
-
                 window = float(eval(ss[2])) if ss[2] != 'None' else None
                 shift = float(ss[3]) if ss[3] != 'None' else 1
                 weight = ss[4] if ss[4] != 'None' else None
@@ -512,7 +511,19 @@ class Plot(object):
                     getattr(plt, '{}scale'.format(a))(s)
                 r = getattr(self, a + 'r' + ('tw' if a == v else ''))
                 if r:  # range (limits)
-                    getattr(plt, '{}lim'.format(a))(eval(r))
+                    rmin, rmax = r.split(',')
+                    rlim = getattr(plt, '{}lim'.format(a))
+                    # defaults
+                    rmind, rmaxd = rlim()
+                    # set range
+                    try:
+                        rmin = rmind if rmin == '' else float(rmin)
+                        rmax = rmaxd if rmax == '' else float(rmax)
+                        log.debug('rmin={}, rmax={}'.format(rmin, rmax))
+                        rlim(rmin, rmax)
+                    except ValueError:
+                        # ignore if input is no float
+                        pass
 
         # legend
         plt.axes(self.axes.values()[-1])  # activate last added axes
@@ -551,17 +562,25 @@ class Plot(object):
         o = {}
         for k, v in self.__dict__.iteritems():
             if k.startswith('o') and v[i] is not None:
-#                o[k[1:]] = v[i]
-                try: o[k[1:]] = eval(v[i])
-                except: o[k[1:]] = v[i]
+                log.debug('v[{}]={}'.format(i, v[i]))
+                log.debug('k[]={}'.format(k))
+                try:
+                    o[k[1:]] = float(v[i])
+                except:
+                    o[k[1:]] = v[i]
         return o
 
 
     def bins(self, i, a):
         try:
             b = getattr(self, a + 'b')[i]
-            if b: return eval(b)
-            else: raise
+            if b:
+                bn = b.split(',')
+                if len(bn) == 1:
+                    return float(bn[0])
+                return tuple([float(x) for x in bn])
+            else:
+                raise
         except:
             return 0
 
@@ -628,7 +647,7 @@ class Plot(object):
         names = []
         for ext in extensions:
             n = name + '.' + ext
-            log.debug('saving plot to %n', n)
+            log.debug('saving plot to %s', n)
             plt.savefig(n, bbox_inches = 'tight', pad_inches = 0.5 if 'map' in self.m else 0.1, transparent = False)
             names.append(n)
 
@@ -664,9 +683,8 @@ class Plot(object):
                 yerr = yerr[m]
             x , y = x[m], y[m]
 
-
-
-            p = eval(self.fp[i])
+            # gather fit parameters
+            p = tuple([float(fp) for fp in self.fp[i].split(',')])
             try:
                 p, c = curve_fit(fitfunc, x, y, p, yerr)
                 log.info('parameters = {}'.format(p))
