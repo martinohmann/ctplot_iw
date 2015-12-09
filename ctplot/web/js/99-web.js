@@ -23,7 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     var speed = 'fast',
         scrollOffset = -40,
         templatePlot,
-        xhr;
+        xhr,
+        tablesAndVars = null;
 
     /** ajax default settings */
     $.ajaxSetup({
@@ -45,7 +46,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             callback(k, this[k]);
         }
     }
-    var tables_and_vars = null;
 
     /** display warning if unsupported browser is used */
     function checkBrowserSupport() {
@@ -83,7 +83,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             success : function(data) {
                 // console.debug(data);
                 // store HDF5- infos globally
-                tables_and_vars = data;
+                tablesAndVars = data;
 
                 experimentbox = $('<select>').attr('name', 'experiment*');
                 $('<option>').text('(bitte Experiment auswählen)').appendTo(experimentbox);
@@ -260,7 +260,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     dropdown.append('<option value=""></option>');
                 }
 
-                $.each(tables_and_vars, function(kk, vv) {
+                $.each(tablesAndVars, function(kk, vv) {
                     if (kk == k) {
                         for (i = 0; i < vv[1].length; ++i) {
                             option = $('<option>');
@@ -293,7 +293,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 k = p.find('select[name^="s"]').val(),
                 vars, i;
 
-            $.each(tables_and_vars, function(kk, vv) {
+            $.each(tablesAndVars, function(kk, vv) {
                 if (kk == k) {
                     vars = $('#vars').empty();
                     for (i = 0; i < vv[1].length; ++i) {
@@ -522,6 +522,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         $('#addplot').appendTo('#plots');
         renumberPlots();
         addHandlers(newPlot);
+        updateAxisVarsDropdowns(newPlot);
         initHelp(newPlot);
         updateHiddenFields();
     }
