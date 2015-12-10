@@ -570,7 +570,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             $('#content > div').css('min-height', $(this).height());
         }).resize();
 
-        $(document).on('click', '.scrollto', function () {
+        $(document).on('click', '.scrollto', function (e) {
+            e.preventDefault();
+
             var origin = $(this),
               el = origin.attr('href');
             scrollToElement(el);
