@@ -569,6 +569,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         $(window).resize(function() {
             $('#content > div').css('min-height', $(this).height());
         }).resize();
+
+        $(document).on('click', '.scrollto', function () {
+            var origin = $(this),
+              el = origin.attr('href');
+            scrollToElement(el);
+        });
     }
 
     function getSessionID() {
@@ -848,7 +854,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     // plot settings
                     container.append('<h2>Einstellungen dieses Plots</h2>');
-                    container.append('<p>Um diesen Plot in eine andere Session zu importieren, speichere die folgenden Einstellungen und lade sie in der anderen Session.</p>');
+                    container.append('<p>Um diesen Plot in eine andere Session zu importieren, speichere die folgenden Einstellungen und lade sie in <a class="scrollto" href="#loadsettings">die andere Session</a>.</p>');
                     jsonSettings = JSON.stringify(settings);
                     p = $('<p>').appendTo(container);
                     $('<textarea id="plotsettings">').text(jsonSettings).appendTo(p);
@@ -900,6 +906,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             }
             t.after(' <span class="symbol">' + symbol + '</span>');
         });
+    }
+
+    function scrollToElement(el) {
+        $('html,body').animate({ 
+            scrollTop: $(el).offset().top + scrollOffset 
+        }, 500);
     }
 
     function initSymbols() {
