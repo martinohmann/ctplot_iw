@@ -848,12 +848,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     // plot settings
                     container.append('<h2>Einstellungen dieses Plots</h2>');
+                    container.append('<p>Um diesen Plot in eine andere Session zu importieren, speichere die folgenden Einstellungen und lade sie in der anderen Session.</p>');
                     jsonSettings = JSON.stringify(settings);
                     p = $('<p>').appendTo(container);
                     $('<textarea id="plotsettings">').text(jsonSettings).appendTo(p);
 
                     // plot url
                     container.append('<h2>Diesen Plot auf einer Webseite einbinden</h2>');
+                    container.append('<p>Der folgende HTML-Code kann benutzt werden um den Plot auf einer Webseite einzubinden.</p>');
                     plotUrl = $(location).attr('href').replace(/[#?].*/, '') + 'plot?' + query.replace(/a=plot/, 'a=png');
                     p = $('<p>').appendTo(container);
                     $('<textarea id="ploturl">').text('<img src="' + plotUrl + '" />').appendTo(p);
