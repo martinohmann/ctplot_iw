@@ -86,9 +86,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 tablesAndVars = data;
 
                 experimentbox = $('<select>').attr('name', 'experiment*');
-                $('<option>').text('(bitte Experiment auswählen)').appendTo(experimentbox);
+                $('<option>').val('').text('(bitte Experiment auswählen)').appendTo(experimentbox);
                 datasetbox = $('<select>').attr('name', 's*');
-                $('<option>').text('(bitte Datensatz auswählen)').appendTo(datasetbox);
+                $('<option>').val('').text('(bitte Datensatz auswählen)').appendTo(datasetbox);
 
                 $.each(data, function(id, info) {
                     // console.debug(id+' -- '+info);
@@ -182,7 +182,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     function updateHiddenFields() {
         console.debug('* update hidden fields');
         var mode = $(':input[name="detaillevel"]').val(),
-          visible, hidden, tohide;
+          visible, hidden, tohide, plotcount;
+
+        plotcount = $('.plot').length;
+        $('#plotcount').val(plotcount);
 
         console.debug('detaillevel=' + mode);
         if (mode == 'expert') {
@@ -792,6 +795,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             xhr = $.ajax({
                 data : query,
                 success : function(data) {
+                    if (data.errors) {
+                        var errorbox = $('<div class="errorbox">'),
+                            errorlist = $('<ul>');
+
+                        if (data.errors.length > 1) {
+                            errorbox.html('<p>Es sind Fehler aufgetreten:</p>');
+                        } else {
+                            errorbox.html('<p>Es ist ein Fehler aufgetreten:</p>');
+                        }
+
+                        $.each(data.errors, function(k, v) {
+                            errorlist.append('<li>'+v+'</li>');
+                        });
+
+                        errorbox.append(errorlist);
+
+                        $('#result').empty();
+                        $('#error').html(errorbox);
+                        // scroll to plot section
+                        $('nav a[href="#output"]').click();
+                        return;
+                    }
+
                     var saveButton, p, container, 
                         left, right, 
                         list, el,
@@ -879,11 +905,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 },
                 error : function(xhr, text, error) {
                     var errorbox = $('<div class="errorbox">');
+                    errorbox.html('<p>Es ist ein unbekannter Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.</p>');
 
                     $('#result').empty();
-                    errorbox.html('<p>Fehler beim Erstellen des Plots. Bitte Ploteinstellungen überprüfen.</p>' + '<p>Fehlertext: "' + text + '"</p>');
                     $('#error').html(errorbox);
-                    
                     // scroll to plot section
                     $('nav a[href="#output"]').click();
                 }

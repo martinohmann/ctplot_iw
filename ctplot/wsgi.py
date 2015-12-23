@@ -12,7 +12,9 @@ import matplotlib
 matplotlib.use('Agg')  # headless backend
 
 import ctplot.plot
+import ctplot.validation as validation
 from ctplot.utils import hashargs
+from ctplot.i18n import _
 
 
 
@@ -143,14 +145,52 @@ def make_plot(settings, config):
     name = os.path.join(config['plotdir'], basename).replace('\\', '/')
 
     # try to get plot from cache
-    if config['cachedir'] and os.path.isfile(name + '.png'):
-        return dict([(e, name + '.' + e) for e in ['png', 'svg', 'pdf']])
-
+    if False and config['cachedir'] and os.path.isfile(name + '.png'):
+        return [dict([(e, name + '.' + e) for e in ['png', 'svg', 'pdf']]), None]
     else:
         # lock long running plot creation
         with plot_lock:
+            try:
+                pc = int(settings['plotcount'])
+            except Exception:
+                return [None, [_('No Plots detected')]]
+
+            print settings
+
+            v = validation.FormDataValidator(settings)
+
+            for N in xrange(pc):
+                n = str(N)
+
+                if N == 0:
+                    mode = settings['m'+n]
+
+                # mode
+                v.add('m' + n, validation.Regexp('^'+mode+'$', regexp_desc='the other datasets\' values'))
+
+            if not v.validate():
+                return [None, v.get_errors()]
+
+
+            v = validation.FormDataValidator(settings)
+
+            for N in xrange(pc):
+                n = str(N)
+                # dataset
+                v.add('s' + n, validation.NotEmpty())
+                # axis
+
+                v.add('x' + n, validation.NotEmpty())
+                fp = settings['fp' + n]
+                fp = [float(_fp) for _fp in fp.split(',')]
+
+                v.add('ff' + n, validation.Expression(transform=False, args = { 'x': 1, 'p': fp }))
+
+            if not v.validate():
+                return [None, v.get_errors()]
+
             p = ctplot.plot.Plot(config, **settings)
-            return p.save(name)
+            return [p.save(name), None]
 
 
 def randomChars(n):
@@ -169,10 +209,15 @@ def handle_action(environ, start_response, config):
 
         settings = {}
         for k in fields.keys():
-            if k[0] in 'xyzcmsorntwhfgl':
+            if k[0] in 'xyzcmsorntwhfglp':
                 settings[k] = fields.getfirst(k).strip().decode('utf8', errors = 'ignore')
 
-        images = make_plot(settings, config)
+        # try:
+        images, errors = make_plot(settings, config)
+
+        if errors:
+            return serve_json({ 'errors': errors }, start_response)
+
         for k, v in images.items():
             images[k] = 'plots/' + basename(v)
 
@@ -181,6 +226,8 @@ def handle_action(environ, start_response, config):
 
         elif action in ['png', 'svg', 'pdf']:
             return serve_plot(images[action], start_response, config)
+        # except Exception:
+        #     return serve_json({ 'errors': ['An unknown error occurred'] }, start_response)
 
 
 
