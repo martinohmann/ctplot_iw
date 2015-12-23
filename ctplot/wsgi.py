@@ -145,7 +145,7 @@ def make_plot(settings, config):
     name = os.path.join(config['plotdir'], basename).replace('\\', '/')
 
     # try to get plot from cache
-    if False and config['cachedir'] and os.path.isfile(name + '.png'):
+    if config['cachedir'] and os.path.isfile(name + '.png'):
         return [dict([(e, name + '.' + e) for e in ['png', 'svg', 'pdf']]), None]
     else:
         # lock long running plot creation
