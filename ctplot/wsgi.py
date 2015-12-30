@@ -137,37 +137,48 @@ def serve_plain(data, start_response):
     return [data]
 
 def validate_settings(settings):
+    errors = {
+        'global': [],
+        'diagrams': {}
+    }
+    valid = True
+
     try:
         pc = int(settings['plots'])
+        if pc < 1: raise Exception
     except Exception:
-        return [False, [_('No Plots detected')]]
+        errors['global'].append(_('No plots detected'))
+        return [False, errors]
 
     print settings
-
-    v = validation.FormDataValidator(settings)
+    mode = settings['m0']
 
     for N in xrange(pc):
         n = str(N)
 
-        if N == 0:
-            mode = settings['m'+ n]
+        v = validation.FormDataValidator(settings)
 
         # mode
         v.add('m' + n, validation.Regexp('^'+mode+'$',
-            regexp_desc='the other datasets\' values'),
+            regexp_desc=_("diagram type of the first dataset")),
             stop_on_error=True)
 
-    for N in xrange(pc):
-        n = str(N)
-
         # dataset
-        v.add('s' + n, validation.NotEmpty())
+        v.add('s' + n, validation.NotEmpty(),
+            title=_('dataset'))
+
         # axis
-        v.add('x' + n, validation.NotEmpty())
+        v.add('x' + n, validation.NotEmpty(),
+            title=_('x-variable'))
+
+        if settings['m' + n] in ['h1', 'h2']:
+            # stats box
+            v.add('sb' + n, validation.Regexp('^[nuomspewkxca]*$'))
 
         if settings['m' + n] in ['xy', 'h2']:
             # y axis
-            v.add('y' + n, validation.NotEmpty())
+            v.add('y' + n, validation.NotEmpty(),
+            title=_('y-variable'))
 
         if settings['m' + n] in ['xy', 'h1', 'p']:
             # fit
@@ -182,33 +193,71 @@ def validate_settings(settings):
                     transform=False,
                     args = { 'x': 1, 'p': fp }
                 ),
-                title="Fit function" + n + " and/or parameters")
+                title=_('fit function and/or parameters'))
+
+            # fit linestyle
+            v.add('fl' + n, validation.Regexp(
+                    '^([bgrcmykw]?(-|--|:|-.)?|(-|--|:|-.)?[bgrcmykw]?)$',
+                    regexp_desc=_('mathplotlib colors and linestyles')
+                ),
+                title=_('fit line style'))
+
+        if settings['m' + n] != 'h2':
+            # linewidth
+            v.add('o' + n + 'linewidth', validation.Float(allow_empty=True),
+                title=_('line width'))
 
         if settings['m' + n] == 'map':
             # map only works on valid geo coords
             v.add('x' + n, [validation.NotEmpty(),
                 validation.Regexp('^(lat|lon)$',
-                    regexp_desc='something like e.g. lat, lon')
-            ])
+                    regexp_desc=_("latitude or longitude"))
+            ],
+            title=_('x-variable'))
+
             v.add('y' + n, [validation.NotEmpty(),
                 validation.Regexp('^(lat|lon)$',
-                    regexp_desc='something like e.g. lat, lon')
-            ])
+                    regexp_desc=_('latitude or longitude'))
+            ],
+            title=_('y-variable'))
+
+        valid = v.validate() and valid
+        errors['diagrams'][n] = v.get_errors()
+
+    # global fields
+    v = validation.FormDataValidator(settings)
 
     # x/y/z-ranges: min/max
-    for ar in ['xr', 'yr', 'zr', 'xrtw', 'yrtw']:
+    for ar in ['xr', 'yr', 'zr']:
         for m in ['min', 'max']:
             field = ar + '-' + m
+            title = ar[0] + '-' + m
             if field in settings:
-                v.add(field, validation.Float())
+                v.add(field, validation.Float(),
+                    title=_(title))
+
+    # twin axis: x2/y2-ranges: min/max
+    for ar in ['xrtw', 'yrtw']:
+        for m in ['min', 'max']:
+            field = ar + '-' + m
+            title = ar[0] + '2-' + m
+            if field in settings:
+                v.add(field, validation.Float(),
+                    title=_(title))
 
     # width, height
-    for field in ['w', 'h']:
+    for wh in ['width', 'height']:
+        field = wh[0]
         if field in settings:
-            v.add(field, validation.Float())
+            v.add(field, validation.Float(),
+                title=_(wh))
+
+    valid = v.validate() and valid
+    errors['global'] = v.get_errors()
+    print errors
 
     # validate
-    return [v.validate(), v.get_errors()]
+    return [valid, errors]
 
 
 plot_lock = Lock()
@@ -251,8 +300,14 @@ def handle_action(environ, start_response, config):
             if k[0] in 'xyzcmsorntwhfglp':
                 settings[k] = fields.getfirst(k).strip().decode('utf8', errors = 'ignore')
 
-        # try:
-        images, errors = make_plot(settings, config)
+        try:
+            images, errors = make_plot(settings, config)
+        except Exception as e:
+            return serve_json({
+                'errors': {
+                    'global': [_('An unknown error occurred') + ': ' + str(e)]
+                }
+            }, start_response)
 
         if errors:
             return serve_json({ 'errors': errors }, start_response)
@@ -265,8 +320,6 @@ def handle_action(environ, start_response, config):
 
         elif action in ['png', 'svg', 'pdf']:
             return serve_plot(images[action], start_response, config)
-        # except Exception:
-        #     return serve_json({ 'errors': ['An unknown error occurred'] }, start_response)
 
 
 

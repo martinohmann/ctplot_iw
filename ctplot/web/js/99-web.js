@@ -383,9 +383,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         // datasets
         plot.find(':input[name^="s"]').change(function() {
-            console.log('set changed');
-            updateHiddenFields();
-            updateAxisVarsDropdowns(plot);
+            // only update if field really is dataset dropdown
+            if ($(this).attr('name').match(/^s\d/)) {
+              console.log('set changed');
+              updateHiddenFields();
+              updateAxisVarsDropdowns(plot);
+            }
         });
 
         updateHiddenFields();
@@ -795,23 +798,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 data : query,
                 success : function(data) {
                     if (data.errors) {
-                        var errorbox = $('<div class="errorbox">'),
-                            errorlist = $('<ul>');
+                        var errors = data.errors,
+                            errorBox = $('<div class="errorbox">'),
+                            errorList = $('<ul>');
 
-                        if (data.errors.length > 1) {
-                            errorbox.html('<p>Es sind Fehler aufgetreten:</p>');
-                        } else {
-                            errorbox.html('<p>Es ist ein Fehler aufgetreten:</p>');
-                        }
+                        errorBox.html('<p>Es sind Fehler aufgetreten:</p>');
 
-                        $.each(data.errors, function(k, v) {
-                            errorlist.append('<li>'+v+'</li>');
+                        console.log(errors);
+
+                        $.each(errors.global, function(_, msg) {
+                            errorList.append('<li>' + msg + '</li>');
                         });
 
-                        errorbox.append(errorlist);
+                        if (errors.diagrams) {
+                            $.each(errors.diagrams, function(dataset, dsErrors) {
+                                console.log(dataset, dsErrors);
+                                if (dsErrors.length < 1)
+                                    return;
+
+                                var dataset = parseInt(dataset) + 1,
+                                    dsErrorList = $('<ul>'),
+                                    dsLi = $('<li>' + dataset + '. Datenreihe:</li>');
+
+                                $.each(dsErrors, function(_, msg) {
+                                    dsErrorList.append('<li>' + msg + '</li>');
+                                });
+
+                                dsLi.append(dsErrorList);
+                                errorList.append(dsLi);
+                            });
+                        }
+
+                        errorBox.append(errorList);
 
                         $('#result').empty();
-                        $('#error').html(errorbox);
+                        $('#error').html(errorBox);
                         // scroll to plot section
                         $('nav a[href="#output"]').click();
                         return;

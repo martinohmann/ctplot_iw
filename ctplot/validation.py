@@ -42,12 +42,15 @@ class Validator(object):
 
 class Castable(Validator):
 
-    def __init__(self, cast_func = None):
+    def __init__(self, cast_func = None, allow_empty = False):
         self.cast_func = cast_func
         self.msg_fmt = ''
+        self.allow_empty = allow_empty
 
     def validate(self, name, title, value):
         try:
+            if self.allow_empty and value == '':
+                return value
             value = self.cast_func(value)
         except ValueError:
             raise ValidationError(self.msg_fmt % title)
@@ -59,8 +62,8 @@ class Int(Castable):
     """
     Validates if value can be cast to integer
     """
-    def __init__(self):
-        super(Int, self).__init__(int)
+    def __init__(self, **kwargs):
+        super(Int, self).__init__(int, **kwargs)
         self.msg_fmt = _('%s has to be an integer')
 
 
@@ -90,8 +93,8 @@ class Float(Castable):
     """
     Validates if value ca be cast to float
     """
-    def __init__(self):
-        super(Float, self).__init__(float)
+    def __init__(self, **kwargs):
+        super(Float, self).__init__(float, **kwargs)
         self.msg_fmt = _('%s has to be a float value')
 
 
