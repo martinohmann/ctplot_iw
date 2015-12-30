@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf8
 
 import os, json, random, string
 from os.path import join, abspath, basename
@@ -147,7 +148,7 @@ def validate_settings(settings):
         pc = int(settings['plots'])
         if pc < 1: raise Exception
     except Exception:
-        errors['global'].append(_('No plots detected'))
+        errors['global'].append(_('no plots detected'))
         return [False, errors]
 
     print settings
@@ -161,7 +162,8 @@ def validate_settings(settings):
         # mode
         v.add('m' + n, validation.Regexp('^'+mode+'$',
             regexp_desc=_("diagram type of the first dataset")),
-            stop_on_error=True)
+            stop_on_error=True,
+            title=_('mode'))
 
         # dataset
         v.add('s' + n, validation.NotEmpty(),
@@ -173,12 +175,13 @@ def validate_settings(settings):
 
         if settings['m' + n] in ['h1', 'h2']:
             # stats box
-            v.add('sb' + n, validation.Regexp('^[nuomspewkxca]*$'))
+            v.add('sb' + n, validation.Regexp('^[nuomspewkxca]*$'),
+                title=_('statistics box'))
 
         if settings['m' + n] in ['xy', 'h2']:
             # y axis
             v.add('y' + n, validation.NotEmpty(),
-            title=_('y-variable'))
+                title=_('y-variable'))
 
         if settings['m' + n] in ['xy', 'h1', 'p']:
             # fit
@@ -305,7 +308,7 @@ def handle_action(environ, start_response, config):
         except Exception as e:
             return serve_json({
                 'errors': {
-                    'global': [_('An unknown error occurred') + ': ' + str(e)]
+                    'global': [_('an unknown error occurred') + ': ' + str(e)]
                 }
             }, start_response)
 

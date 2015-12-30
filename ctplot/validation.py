@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#
+# coding: utf-8
+
 # tool for data validation of dynamic forms
 # Copyright (C) 2015  Martin Ohmann
 #
@@ -83,8 +84,9 @@ class IntRange(Int):
             if not (self.rmin <= value <= self.rmax):
                 raise ValueError
         except ValueError:
-            raise ValidationError(_('%s has to be within range [%d..%d]') %
-                (title, self.rmin, self.rmax))
+            raise ValidationError(
+                _('%(title)s has to be within range [%(min)d..%(max)d]') %
+                { 'title': title, 'min': self.rmin, 'max': self.rmax })
         return value
 
 
@@ -114,8 +116,9 @@ class FloatRange(Float):
             if not (self.rmin <= value <= self.rmax):
                 raise ValueError
         except ValueError:
-            raise ValidationError(_('%s has to be within range [%f..%f]') %
-                (title, self.rmin, self.rmax))
+            raise ValidationError(
+                _('%(title)s has to be within range [%(min)f..%(max)f]') %
+                { 'title': title, 'min': self.rmin, 'max': self.rmax })
         return value
 
 
@@ -136,8 +139,9 @@ class Regexp(Validator):
 
     def validate(self, name, title, value):
         if not self.re.match(value):
-            raise ValidationError(_("%s has to match %s") %
-                    (title, self.regexp_desc))
+            raise ValidationError(
+                _("%(title)s has to match %(desc)s") %
+                { 'title': title, 'desc': self.regexp_desc })
         return value
 
 
@@ -161,14 +165,15 @@ class OneOf(Validator):
     """
     def __init__(self, item_list):
         if not isinstance(item_list, (list, tuple)):
-            raise ValueError("List or tuple expected")
+            raise ValueError("list or tuple expected")
 
         self.item_list = item_list
 
     def validate(self, name, title, value):
         if not value in self.item_list:
-            raise ValidationError(_("%s has to be one of %s") %
-                    (title, ', '.join(self.item_list)))
+            raise ValidationError(
+                _("%(title)s has to be one of %(items)s") %
+                { 'title': title, 'items': ', '.join(self.item_list)})
         return value
 
 
@@ -238,7 +243,7 @@ class FormDataValidator(DataValidator):
             return
 
         if not isinstance(validator, Validator):
-            raise ValidatorTypeError(_("Invalid validator for field %s: %s") %
+            raise ValidatorTypeError('invalid validator for field %s: %s' %
                     (name, str(validator)))
 
         if not name in self.fields:
@@ -257,7 +262,7 @@ class FormDataValidator(DataValidator):
             title = self.fields[name]['title']
 
             if self.strict and not name in self.form_data:
-                raise ValidationError(_('%s not found in form data') % title)
+                raise ValidationError('%s not found in form data' % title)
 
             for v in self.fields[name]['validators']:
                 try:

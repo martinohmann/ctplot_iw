@@ -1,3 +1,4 @@
-# mock translation function
-def _(msg):
-    return msg
+import gettext
+
+t = gettext.translation('ctplot', 'locale', languages=['de'], fallback=True)
+_ = t.gettext
