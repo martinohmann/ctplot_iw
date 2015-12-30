@@ -540,14 +540,10 @@ class Plot(object):
         # get plot size to position textboxes
         fig = plt.gcf()
         sx, sy = fig.get_size_inches() * fig.dpi
-        print fig.get_window_extent(fig.canvas.get_renderer()).extents
-        print sx, sy
-
 
         # textboxes
         cx = 0
         cy = sy
-        box_count = len(self.textboxes)
         for i, t in enumerate(self.textboxes):
             label = plt.annotate(t, (sx, cy), xycoords = 'axes pixels',
                 family = 'monospace', size = 'small',
@@ -561,9 +557,8 @@ class Plot(object):
             cy -= sy * 0.25
 
         # fitboxes
-        cx += sx + 40
+        cx = cx + sx + 40 if len(self.textboxes) else sx
         cy = sy
-        box_count = len(self.fitboxes)
         for i, t in enumerate(self.fitboxes):
             plt.annotate(t, (cx, cy), xycoords = 'axes pixels',
                 family = 'monospace', size = 'small',
@@ -571,11 +566,6 @@ class Plot(object):
                 bbox = dict(facecolor = 'w', alpha = 0.8, boxstyle = "round,pad=0.5"),
                 annotation_clip = False)
             cy -= sy * 0.25
-
-
-
-
-
 
 
     def data(self, i):
