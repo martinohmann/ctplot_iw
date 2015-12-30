@@ -13,8 +13,10 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from utils import get_args_from, isseq, set_defaults, number_mathformat, number_format, hashargs, noop
 from itertools import product
-from safeeval import safeeval
 from locket import lock_file
+
+from i18n import _
+from safeeval import safeeval
 
 logging.basicConfig(level = logging.DEBUG, format = '%(filename)s:%(funcName)s:%(lineno)d:%(message)s')
 

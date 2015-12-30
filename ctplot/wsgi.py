@@ -12,13 +12,10 @@ from pkg_resources import resource_string, resource_exists, resource_isdir, reso
 import matplotlib
 matplotlib.use('Agg')  # headless backend
 
-import ctplot.plot
-import ctplot.validation as validation
-from ctplot.utils import hashargs
-from ctplot.i18n import _
-
-
-
+import plot
+import validation
+from utils import hashargs
+from i18n import _
 
 _config = None
 
@@ -278,7 +275,7 @@ def make_plot(settings, config):
             if not valid:
                 return [None, errors]
 
-            p = ctplot.plot.Plot(config, **settings)
+            p = plot.Plot(config, **settings)
             return [p.save(name), None]
 
 
@@ -326,7 +323,7 @@ def handle_action(environ, start_response, config):
 
     elif action == 'list':
         if not available_tables or time() - available_tables[0] > 86400:
-            available_tables = time(), ctplot.plot.available_tables(datadir)
+            available_tables = time(), plot.available_tables(datadir)
         return serve_json(available_tables[1], start_response)
 
     elif action == 'save':
