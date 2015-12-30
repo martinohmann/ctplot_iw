@@ -207,6 +207,7 @@ class Plot(object):
 
         self.legend = []
         self.textboxes = []
+        self.fitboxes = []
 
         self.progress = 0  # reaching from 0 to 1
 
@@ -536,14 +537,40 @@ class Plot(object):
             plt.setp(leg.get_texts(), fontsize = self.f)
             leg.get_frame().set_alpha(0.8)
 
-        # textboxes
-        for i, t in enumerate(self.textboxes):
-            pos = text_poss[i]
-            ha, va = text_algn[i]
-            plt.annotate(t, 10 * pos, xycoords = 'axes points', family = 'monospace', size = 'small',
-                     horizontalalignment = ha, verticalalignment = va, multialignment = 'left',
-                     bbox = dict(facecolor = 'w', alpha = 0.8, boxstyle = "round,pad=0.5"))
+        # get plot size to position textboxes
+        fig = plt.gcf()
+        sx, sy = fig.get_size_inches() * fig.dpi
+        print fig.get_window_extent(fig.canvas.get_renderer()).extents
+        print sx, sy
 
+
+        # textboxes
+        cx = 0
+        cy = sy
+        box_count = len(self.textboxes)
+        for i, t in enumerate(self.textboxes):
+            label = plt.annotate(t, (sx, cy), xycoords = 'axes pixels',
+                family = 'monospace', size = 'small',
+                horizontalalignment = 'left', verticalalignment = 'top',
+                bbox = dict(facecolor = 'w', alpha = 0.8, boxstyle = "round,pad=0.5"),
+                annotation_clip = False)
+            extents = label.get_window_extent(fig.canvas.get_renderer()).extents
+            w = extents[2] - extents[0]
+            if w > cx:
+                cx = w
+            cy -= sy * 0.25
+
+        # fitboxes
+        cx += sx + 40
+        cy = sy
+        box_count = len(self.fitboxes)
+        for i, t in enumerate(self.fitboxes):
+            plt.annotate(t, (cx, cy), xycoords = 'axes pixels',
+                family = 'monospace', size = 'small',
+                horizontalalignment = 'left', verticalalignment = 'top',
+                bbox = dict(facecolor = 'w', alpha = 0.8, boxstyle = "round,pad=0.5"),
+                annotation_clip = False)
+            cy -= sy * 0.25
 
 
 
@@ -718,7 +745,7 @@ class Plot(object):
                     t += '\np[{}] = {}$\\pm${}'.format(k, number_format(v), number_format(np.sqrt(c[k, k])))
                 except:
                     t += '\np[{}] = {}$\\pm${}'.format(k, v, c)
-            self.textboxes.append(t)
+            self.fitboxes.append(t)
             ll = ('Fit' + fit_status + ' y=' + ff)
             for k, v in  enumerate(p):
                 ll = ll.replace('p[{}]'.format(k), number_format(v, 3))

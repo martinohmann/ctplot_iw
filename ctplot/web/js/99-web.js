@@ -844,7 +844,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     /* add query string to prevent browser
                      * from showing cached image */
-                    $('<img>').attr('src', img)
+                    $('<img>').attr('src', img + '?t=' + new Date().getTime())
                         .attr('alt', query).appendTo(result);
 
                     /* container for saveButton and image links */
