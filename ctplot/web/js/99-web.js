@@ -468,7 +468,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     function initSettingsLoader() {
-        console.debug('* init settnings loader');
+        console.debug('* init settings loader');
         $(':button[name="load"]').click(function() {
             try {
                 var s = JSON.parse($(':input[name="settingstoload"]').val());

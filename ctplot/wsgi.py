@@ -136,6 +136,79 @@ def serve_plain(data, start_response):
     start_response('200 OK', [content_type(), cc_nocache])
     return [data]
 
+def validate_settings(settings):
+    try:
+        pc = int(settings['plotcount'])
+    except Exception:
+        return [False, [_('No Plots detected')]]
+
+    print settings
+
+    v = validation.FormDataValidator(settings)
+
+    for N in xrange(pc):
+        n = str(N)
+
+        if N == 0:
+            mode = settings['m'+ n]
+
+        # mode
+        v.add('m' + n, validation.Regexp('^'+mode+'$',
+            regexp_desc='the other datasets\' values'),
+            stop_on_error=True)
+
+    for N in xrange(pc):
+        n = str(N)
+
+        # dataset
+        v.add('s' + n, validation.NotEmpty())
+        # axis
+        v.add('x' + n, validation.NotEmpty())
+
+        if settings['m' + n] in ['xy', 'h2']:
+            # y axis
+            v.add('y' + n, validation.NotEmpty())
+
+        if settings['m' + n] in ['xy', 'h1', 'p']:
+            # fit
+            try:
+                fp = settings['fp' + n]
+                fp = [float(_fp) for _fp in fp.split(',')]
+            except Exception:
+                fp = None
+
+            v.add('ff' + n,
+                validation.Expression(
+                    transform=False,
+                    args = { 'x': 1, 'p': fp }
+                ),
+                title="Fit function" + n + " and/or parameters")
+
+        if settings['m' + n] == 'map':
+            # map only works on valid geo coords
+            v.add('x' + n, [validation.NotEmpty(),
+                validation.Regexp('^(lat|lon)$',
+                    regexp_desc='something like e.g. lat, lon')
+            ])
+            v.add('y' + n, [validation.NotEmpty(),
+                validation.Regexp('^(lat|lon)$',
+                    regexp_desc='something like e.g. lat, lon')
+            ])
+
+    # x/y/z-ranges: min/max
+    for ar in ['xr', 'yr', 'zr', 'xrtw', 'yrtw']:
+        for m in ['min', 'max']:
+            field = ar + '-' + m
+            if field in settings:
+                v.add(field, validation.Float())
+
+    # width, height
+    for field in ['w', 'h']:
+        if field in settings:
+            v.add(field, validation.Float())
+
+    # validate
+    return [v.validate(), v.get_errors()]
 
 
 plot_lock = Lock()
@@ -150,44 +223,10 @@ def make_plot(settings, config):
     else:
         # lock long running plot creation
         with plot_lock:
-            try:
-                pc = int(settings['plotcount'])
-            except Exception:
-                return [None, [_('No Plots detected')]]
+            valid, errors = validate_settings(settings)
 
-            print settings
-
-            v = validation.FormDataValidator(settings)
-
-            for N in xrange(pc):
-                n = str(N)
-
-                if N == 0:
-                    mode = settings['m'+n]
-
-                # mode
-                v.add('m' + n, validation.Regexp('^'+mode+'$', regexp_desc='the other datasets\' values'))
-
-            if not v.validate():
-                return [None, v.get_errors()]
-
-
-            v = validation.FormDataValidator(settings)
-
-            for N in xrange(pc):
-                n = str(N)
-                # dataset
-                v.add('s' + n, validation.NotEmpty())
-                # axis
-
-                v.add('x' + n, validation.NotEmpty())
-                fp = settings['fp' + n]
-                fp = [float(_fp) for _fp in fp.split(',')]
-
-                v.add('ff' + n, validation.Expression(transform=False, args = { 'x': 1, 'p': fp }))
-
-            if not v.validate():
-                return [None, v.get_errors()]
+            if not valid:
+                return [None, errors]
 
             p = ctplot.plot.Plot(config, **settings)
             return [p.save(name), None]

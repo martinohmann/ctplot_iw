@@ -1,9 +1,26 @@
 #!/usr/bin/env python
-
-import copy
+#
+# tool for data validation of dynamic forms
+# Copyright (C) 2015  Martin Ohmann
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 import re
+from collections import OrderedDict
+from copy import deepcopy
 
-from ctplot.i18n import _
+from i18n import _
 from safeeval import safeeval
 
 class ValidationError(Exception):
@@ -50,7 +67,7 @@ class Int(Castable):
 class IntRange(Int):
 
     """
-    First validates if value is an int, before validating range
+    Validates if value is an int, before validating range
     """
     def __init__(self, rmin, rmax):
         super(IntRange, self).__init__()
@@ -81,7 +98,7 @@ class Float(Castable):
 class FloatRange(Float):
 
     """
-    First validates if value is a float, before validating range
+    Validates if value is a float, before validating range
     """
     def __init__(self, rmin, rmax):
         super(FloatRange, self).__init__()
@@ -102,7 +119,9 @@ class FloatRange(Float):
 class Regexp(Validator):
 
     """
-    Validates if value matches regexp
+    Validates if value matches the given regexp,
+    regexp_desc can supply a meaningful transcription
+    of the given regexp
     """
     def __init__(self, regexp, regexp_desc = None):
         self.regexp = regexp
@@ -135,7 +154,7 @@ class NotEmpty(Validator):
 class OneOf(Validator):
 
     """
-    Validates if value matches regexp
+    Validates if value is in item_list
     """
     def __init__(self, item_list):
         if not isinstance(item_list, (list, tuple)):
@@ -154,7 +173,10 @@ class Expression(Validator):
 
     """
     Tries to evaluate the given expression,
-    the expression is surrounded by the optional prefix and suffix
+    the expression is surrounded by the optional prefix and suffix,
+    'args' are passed to safeeval as local variables
+    if 'transform' is set to False, the expression will be evaluated,
+    but the result will not be stored into the form_data dict
     """
     def __init__(self, prefix = '', suffix = '', args = {}, transform = False):
         self.prefix = prefix
@@ -182,16 +204,25 @@ class Expression(Validator):
         return value
 
 
-class FormDataValidator(object):
+class DataValidator(object):
+
+    def add(self, name, validator, **kwargs):
+        pass
+
+    def validate(self):
+        pass
+
+
+class FormDataValidator(DataValidator):
 
     """
     The FormValidator applies validators to certain fields of the form_data.
     """
     def __init__(self, form_data, strict=False):
-        self.fields = {}
+        self.fields = OrderedDict()
         self.errors = []
         self.strict = strict
-        self.form_data = copy.deepcopy(form_data)
+        self.form_data = deepcopy(form_data)
 
     """
     Add a validator for a form field defined by name. title will be
@@ -208,8 +239,13 @@ class FormDataValidator(object):
                     (name, str(validator)))
 
         if not name in self.fields:
-            title = kwargs['field_title'] if 'field_title' in kwargs else name
-            self.fields[name] = { 'title': title, 'validators': [] }
+            title = kwargs['title'] if 'title' in kwargs else name
+            stop = kwargs['stop_on_error'] if 'stop_on_error' in kwargs else False
+            self.fields[name] = {
+                'stop_on_error': stop,
+                'title': title,
+                'validators': []
+            }
 
         self.fields[name]['validators'].append(validator)
 
@@ -217,10 +253,8 @@ class FormDataValidator(object):
         for name in self.fields:
             title = self.fields[name]['title']
 
-#             if not name in self.form_data:
-#                 if self.strict:
-#                     self.errors.append(_("%s not found in form data") % title)
-#                 continue
+            if self.strict and not name in self.form_data:
+                raise ValidationError(_('%s not found in form data') % title)
 
             for v in self.fields[name]['validators']:
                 try:
@@ -240,6 +274,8 @@ class FormDataValidator(object):
                     # it is sufficient to add the first error of each field to
                     # the error list
                     self.errors.append(str(e))
+                    if self.fields[name]['stop_on_error']:
+                        return False
                     break
 
         return self.is_valid()
