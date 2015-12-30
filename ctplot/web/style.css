@@ -195,6 +195,15 @@ a.internal-link:before {
   color: #555555;
 }
 
+.errorbox ul {
+  padding: 0 0 0 20px;
+  margin: 5px;
+}
+
+.errorbox h3 {
+  padding: .5em 0;
+}
+
 .text-centered {
   text-align: center;
 }

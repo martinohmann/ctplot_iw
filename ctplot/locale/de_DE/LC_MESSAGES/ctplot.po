@@ -58,8 +58,8 @@ msgid "latitude or longitude"
 msgstr "Längen- oder Breitengrad"
 
 #: wsgi.py:311
-msgid "an unknown error occurred"
-msgstr "Unbekannter Fehler aufgetreten"
+msgid "unknown error"
+msgstr "Unbekannter Fehler"
 
 #: validation.py:68
 #, python-format

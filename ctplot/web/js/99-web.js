@@ -802,13 +802,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             errorBox = $('<div class="errorbox">'),
                             errorList = $('<ul>');
 
-                        errorBox.html('<p>Es sind Fehler aufgetreten:</p>');
-
                         console.log(errors);
-
+                        errorBox.html('<h3>Es sind Fehler aufgetreten:</h3>');
                         $.each(errors.global, function(_, msg) {
                             errorList.append('<li>' + msg + '</li>');
                         });
+                        errorBox.append(errorList);
 
                         if (errors.diagrams) {
                             $.each(errors.diagrams, function(dataset, dsErrors) {
@@ -817,19 +816,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                     return;
 
                                 var dataset = parseInt(dataset) + 1,
-                                    dsErrorList = $('<ul>'),
-                                    dsLi = $('<li>' + dataset + '. Datenreihe:</li>');
+                                    heading = $('<h3>Fehler in der ' + dataset + '. Datenreihe:</h3>');
 
+                                errorList = $('<ul>');
                                 $.each(dsErrors, function(_, msg) {
-                                    dsErrorList.append('<li>' + msg + '</li>');
+                                    errorList.append('<li>' + msg + '</li>');
                                 });
-
-                                dsLi.append(dsErrorList);
-                                errorList.append(dsLi);
+                                errorBox.append(heading).append(errorList);
                             });
                         }
-
-                        errorBox.append(errorList);
 
                         $('#result').empty();
                         $('#error').html(errorBox);

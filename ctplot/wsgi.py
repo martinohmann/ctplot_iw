@@ -306,7 +306,7 @@ def handle_action(environ, start_response, config):
         except Exception as e:
             return serve_json({
                 'errors': {
-                    'global': [_('an unknown error occurred') + ': ' + str(e)]
+                    'global': [_('unknown error') + ': ' + str(e)]
                 }
             }, start_response)
 
