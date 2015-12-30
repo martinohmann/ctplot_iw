@@ -422,7 +422,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 s[name] = field.val();
             }
         });
-        s['plots'] = $('.plot').size();
         return s;
     }
 

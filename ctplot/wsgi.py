@@ -138,7 +138,7 @@ def serve_plain(data, start_response):
 
 def validate_settings(settings):
     try:
-        pc = int(settings['plotcount'])
+        pc = int(settings['plots'])
     except Exception:
         return [False, [_('No Plots detected')]]
 
