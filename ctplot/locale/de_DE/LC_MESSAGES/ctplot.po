@@ -110,43 +110,43 @@ msgid "height"
 msgstr "Höhe"
 
 #: wsgi.py
-msgid "x-min"
+msgid "xr-min"
 msgstr "x-Startwert"
 
 #: wsgi.py
-msgid "y-min"
+msgid "yr-min"
 msgstr "y-Startwert"
 
 #: wsgi.py
-msgid "z-min"
+msgid "zr-min"
 msgstr "z-Startwert"
 
 #: wsgi.py
-msgid "x2-min"
+msgid "xrtw-min"
 msgstr "x2-Startwert"
 
 #: wsgi.py
-msgid "y2-min"
+msgid "yrtw-min"
 msgstr "y2-Startwert"
 
 #: wsgi.py
-msgid "x-max"
+msgid "xr-max"
 msgstr "x-Endwert"
 
 #: wsgi.py
-msgid "y-max"
+msgid "yr-max"
 msgstr "y-Endwert"
 
 #: wsgi.py
-msgid "z-max"
+msgid "zr-max"
 msgstr "z-Endwert"
 
 #: wsgi.py
-msgid "x2-max"
+msgid "xrtw-max"
 msgstr "x2-Endwert"
 
 #: wsgi.py
-msgid "y2-max"
+msgid "yrtw-max"
 msgstr "y2-Endwert"
 
 #: wsgi.py:166

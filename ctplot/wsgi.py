@@ -234,19 +234,17 @@ def validate_settings(settings):
     for ar in ['xr', 'yr', 'zr']:
         for m in ['min', 'max']:
             field = ar + '-' + m
-            title = ar[0] + '-' + m
             if field in settings:
                 v.add(field, validation.Float(),
-                    title=_(title))
+                    title=_(field))
 
     # twin axis: x2/y2-ranges: min/max
     for ar in ['xrtw', 'yrtw']:
         for m in ['min', 'max']:
             field = ar + '-' + m
-            title = ar[0] + '2-' + m
             if field in settings:
                 v.add(field, validation.Float(),
-                    title=_(title))
+                    title=_(field))
 
     # width, height
     for wh in ['width', 'height']:
