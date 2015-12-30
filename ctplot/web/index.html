@@ -226,8 +226,14 @@
                                         <option value="1">links -&gt; rechts</option>
                                         <option value="-1">rechts -&gt; links</option>
                                     </select> </label>
-                                <label data-help="legt die Zeichenreihenfolge fest, kleine Werte (&lt;0) verschieben das Diagramm nach hinten, große Werte (&gt;0)" class="t-xy t-h1 t-p t-map expert">Anordnung
-                                    <input type="text" name="o*zorder">
+                                <label data-help="legt die Zeichenreihenfolge fest, niederige Ebenen verschieben das Diagramm nach hinten, größere nach vorn" class="t-xy t-h1 t-p t-map expert">Anordnung
+                                    <select name="o*zorder">
+                                        <option value=""></option>
+                                        <option value="1">1. Ebene</option>
+                                        <option value="2">2. Ebene</option>
+                                        <option value="3">3. Ebene</option>
+                                        <option value="4">4. Ebene</option>
+                                    </select> </label>
                                 </label>
                                 <label data-help="Farbe der Linie/Datenpunkte" class="t-xy t-h1 t-p t-map expert">Farbe
                                     <input type="hidden" name="o*color">
