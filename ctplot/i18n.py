@@ -1,4 +1,10 @@
 import gettext
+import os
 
-t = gettext.translation('ctplot', 'locale', languages=['de'], fallback=True)
+text_domain = 'ctplot'
+locale_dir = os.path.dirname(__file__) + '/locale'
+
+t = gettext.translation(text_domain, locale_dir,
+    languages=['de'], fallback=True)
+
 _ = t.gettext
