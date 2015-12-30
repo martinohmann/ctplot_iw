@@ -149,45 +149,59 @@ def validate_settings(settings):
         return [False, errors]
 
     print settings
-    mode = settings['m0']
+    diagram_type_0 = settings['m0']
 
     for N in xrange(pc):
         n = str(N)
 
         v = validation.FormDataValidator(settings)
 
-        # mode
-        v.add('m' + n, validation.Regexp('^'+mode+'$',
+        # diagram type
+        v.add('m' + n, validation.Regexp('^'+diagram_type_0+'$',
             regexp_desc=_("diagram type of the first dataset")),
             stop_on_error=True,
             title=_('diagram type'))
+
+        diagram_type = settings['m' + n]
 
         # dataset
         v.add('s' + n, validation.NotEmpty(),
             title=_('dataset'))
 
-        # axis
+        # x axis
         v.add('x' + n, validation.NotEmpty(),
             title=_('x-variable'))
 
-        if settings['m' + n] in ['h1', 'h2']:
-            # stats box
-            v.add('sb' + n, validation.Regexp('^[nuomspewkxca]*$'),
-                title=_('statistics box'))
-
-        if settings['m' + n] in ['xy', 'h2']:
-            # y axis
+        # y axis
+        if diagram_type in ['xy', 'h2']:
             v.add('y' + n, validation.NotEmpty(),
                 title=_('y-variable'))
 
-        if settings['m' + n] in ['xy', 'h1', 'p']:
-            # fit
+        # map only works on valid geo coords
+        if diagram_type == 'map':
+            v.add('x' + n, [validation.NotEmpty(),
+                validation.Regexp('^(lat|lon)',
+                    regexp_desc=_("latitude or longitude"))
+            ],
+            title=_('x-variable'))
+
+            v.add('y' + n, [validation.NotEmpty(),
+                validation.Regexp('^(lat|lon)',
+                    regexp_desc=_('latitude or longitude'))
+            ],
+            title=_('y-variable'))
+
+        # fit validation
+        if diagram_type in ['xy', 'h1', 'p']:
+            # fit parameters
             try:
                 fp = settings['fp' + n]
                 fp = [float(_fp) for _fp in fp.split(',')]
             except Exception:
+                # this will force fit function validation to fail
                 fp = None
 
+            # fit function validation with dummy value x = 1
             v.add('ff' + n,
                 validation.Expression(
                     transform=False,
@@ -202,24 +216,21 @@ def validate_settings(settings):
                 ),
                 title=_('fit line style'))
 
-        if settings['m' + n] != 'h2':
+
+        # statistics box validation
+        if diagram_type in ['h1', 'h2']:
+            v.add('sb' + n, validation.Regexp('^[nuomspewkxca]*$'),
+                title=_('statistics box'))
+
+        # diagram options
+        if diagram_type != 'h2':
+            # markersize
+            v.add('o' + n + 'markersize', validation.Float(allow_empty=True),
+                title=_('marker size'))
+
             # linewidth
             v.add('o' + n + 'linewidth', validation.Float(allow_empty=True),
                 title=_('line width'))
-
-        if settings['m' + n] == 'map':
-            # map only works on valid geo coords
-            v.add('x' + n, [validation.NotEmpty(),
-                validation.Regexp('^(lat|lon)$',
-                    regexp_desc=_("latitude or longitude"))
-            ],
-            title=_('x-variable'))
-
-            v.add('y' + n, [validation.NotEmpty(),
-                validation.Regexp('^(lat|lon)$',
-                    regexp_desc=_('latitude or longitude'))
-            ],
-            title=_('y-variable'))
 
         valid = v.validate() and valid
         errors['diagrams'][n] = v.get_errors()

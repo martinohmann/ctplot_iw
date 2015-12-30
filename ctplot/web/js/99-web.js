@@ -802,16 +802,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             errorBox = $('<div class="errorbox">'),
                             errorList = $('<ul>');
 
-                        console.log(errors);
-                        errorBox.html('<h3>Es sind Fehler aufgetreten:</h3>');
-                        $.each(errors.global, function(_, msg) {
-                            errorList.append('<li>' + msg + '</li>');
-                        });
-                        errorBox.append(errorList);
+                        if (errors.global.length > 0) {
+                            errorBox.html('<h3>Es sind Fehler aufgetreten:</h3>');
+                            $.each(errors.global, function(_, msg) {
+                                errorList.append('<li>' + msg + '</li>');
+                            });
+                            errorBox.append(errorList);
+                        }
 
                         if (errors.diagrams) {
                             $.each(errors.diagrams, function(dataset, dsErrors) {
-                                console.log(dataset, dsErrors);
                                 if (dsErrors.length < 1)
                                     return;
 

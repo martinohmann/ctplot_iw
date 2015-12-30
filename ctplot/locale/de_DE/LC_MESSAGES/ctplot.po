@@ -53,6 +53,10 @@ msgstr "Linienoption für den Fit"
 msgid "line width"
 msgstr "Linienstärke"
 
+#: wsgi.py
+msgid "marker size"
+msgstr "Symbolgröße"
+
 #: wsgi.py:217 wsgi.py:223
 msgid "latitude or longitude"
 msgstr "Längen- oder Breitengrad"
