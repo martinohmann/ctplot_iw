@@ -150,7 +150,7 @@ msgid "yrtw-max"
 msgstr "y2-Endwert"
 
 #: wsgi.py:166
-msgid "mode"
+msgid "diagram type"
 msgstr "Darstellungsform"
 
 #: wsgi.py:179

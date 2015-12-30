@@ -160,7 +160,7 @@ def validate_settings(settings):
         v.add('m' + n, validation.Regexp('^'+mode+'$',
             regexp_desc=_("diagram type of the first dataset")),
             stop_on_error=True,
-            title=_('mode'))
+            title=_('diagram type'))
 
         # dataset
         v.add('s' + n, validation.NotEmpty(),

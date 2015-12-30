@@ -987,7 +987,7 @@ class Plot(object):
         for k in sb:
             k = stats_abrv[k]
             if k in stats:
-                text += '\n{:6} {}'.format(k, number_format(stats[k]))
+                text += '\n{:6} {}'.format(_(k), number_format(stats[k]))
         self.textboxes.append(text)
 
     def stats_fields2d(self, i, contents, xcenters, ycenters):
@@ -1016,7 +1016,7 @@ class Plot(object):
                     v = number_format(v)
                 except:
                     v = '({})'.format(','.join(map(number_format, v)))
-                text += '\n{:6} {}'.format(k, v)
+                text += '\n{:6} {}'.format(_(k), v)
         self.textboxes.append(text)
 
 
