@@ -254,7 +254,6 @@ def validate_settings(settings):
                 ),
                 title=_('fit line style'))
 
-
         # statistics box validation
         if diagram_type in ['h1', 'h2']:
             v.add('sb' + n, validation.Regexp('^[nuomspewkxca]*$'),
@@ -268,8 +267,17 @@ def validate_settings(settings):
 
         # width, height and boundarylat
         if diagram_type == 'map':
-            # TODO: o*width, o*height, o*boundarylat
-            pass
+            v.add('o' + n + 'width', [validation.Int(allow_empty=True),
+                    validation.Gte(1, allow_empty=True)],
+                title=_('detail width'))
+
+            v.add('o' + n + 'height', [validation.Int(allow_empty=True),
+                    validation.Gte(1, allow_empty=True)],
+                title=_('detail height'))
+
+            v.add('o' + n + 'boundarylat', validation.FloatRange(-90, 90,
+                    exclude_min=True, exclude_max=True),
+                title=_('boundary latitude for (N/S) polar'))
 
         # diagram options
         if diagram_type != 'h2':

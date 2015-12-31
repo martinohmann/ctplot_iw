@@ -90,7 +90,9 @@ class Range(Validator):
         self.exclude_max = kwargs['exclude_max'] if 'exclude_max' in kwargs else False
         self.allow_empty = kwargs['allow_empty'] if 'allow_empty' in kwargs else None
         self.castable = None
-        self.msg_fmt = _('%(title)s has to be within range [%(min)f..%(max)f]')
+        self.l = ']' if self.exclude_min else '['
+        self.r = '[' if self.exclude_max else ']'
+        self.msg_fmt = _('%(title)s has to be within range %(l)s%(min).10g,%(max).10g%(r)s')
 
     def validate(self, name, title, value):
         if self.allow_empty and value == '':
@@ -109,7 +111,8 @@ class Range(Validator):
                 raise ValueError
         except ValueError:
             raise ValidationError(self.msg_fmt %
-                { 'title': title, 'min': self.rmin, 'max': self.rmax })
+                { 'title': title, 'min': self.rmin, 'max': self.rmax,
+                    'l': self.l, 'r': self.r })
         return value
 
 
@@ -121,7 +124,6 @@ class IntRange(Range):
     def __init__(self, *args, **kwargs):
         super(IntRange, self).__init__(*args, **kwargs)
         self.castable = Int(**kwargs)
-        self.msg_fmt = _('%(title)s has to be within range [%(min)d..%(max)d]')
 
 
 class FloatRange(Range):
@@ -145,7 +147,7 @@ class Gte(Validator):
             return value
         if value < self.val:
             raise ValidationError(
-                _("%(title)s has to be greater than or equal to %(value)f") %
+                _("%(title)s has to be greater than or equal to %(value).10g") %
                 { 'title': title, 'value': self.val })
         return value
 

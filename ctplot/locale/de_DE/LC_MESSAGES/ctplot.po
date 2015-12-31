@@ -90,11 +90,6 @@ msgstr "Unbekannter Fehler"
 msgid "%s has to be an integer"
 msgstr "%s muss eine Ganzzahl sein"
 
-#: validation.py:88
-#, python-format
-msgid "%(title)s has to be within range [%(min)d..%(max)d]"
-msgstr "%(title)s muss sich im Interval [%(min)d..%(max)d] befinden"
-
 #: validation.py:100
 #, python-format
 msgid "%s has to be a float value"
@@ -102,8 +97,8 @@ msgstr "%s muss eine Fließkommazahl sein"
 
 #: validation.py:120
 #, python-format
-msgid "%(title)s has to be within range [%(min)f..%(max)f]"
-msgstr "%(title)s muss sich im Interval [%(min)f..%(max)f] befinden"
+msgid "%(title)s has to be within range %(l)s%(min).10g,%(max).10g%(r)s"
+msgstr "%(title)s muss sich im Interval %(l)s%(min).10g,%(max).10g%(r)s befinden"
 
 #: validation.py:143
 #, python-format
@@ -126,8 +121,8 @@ msgid "%s is no valid expression"
 msgstr "%s ist kein gültiger Ausdruck"
 
 #: validation.py
-msgid "%(title)s has to be greater than or equal to %(value)f"
-msgstr "%(title)s muss größer als oder gleich %(value)f sein"
+msgid "%(title)s has to be greater than or equal to %(value).10g"
+msgstr "%(title)s muss größer als oder gleich %(value).10g sein"
 
 #: wsgi.py
 msgid "width"
@@ -136,6 +131,18 @@ msgstr "Breite"
 #: wsgi.py
 msgid "outlines"
 msgstr "Konturlinien"
+
+#: wsgi.py
+msgid "detail height"
+msgstr "Höhe des Ausschnitts"
+
+#: wsgi.py
+msgid "detail width"
+msgstr "Breite des Ausschnitts"
+
+#: wsgi.py
+msgid "boundary latitude for (N/S) polar"
+msgstr "Grenzbreite für (N/S)-polar"
 
 #: wsgi.py
 msgid "height"
