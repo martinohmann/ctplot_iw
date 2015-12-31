@@ -191,6 +191,27 @@ def validate_settings(settings):
             ],
             title=_('y-variable'))
 
+        # binning
+        if diagram_type in ['h1', 'p']:
+            # x-bins
+            v.add('x' + n + 'b',
+                validation.Regexp('^(\s*[+]?[0-9]*\.?' +
+                    '[0-9]+\s*,)*(\s*[+]?[0-9]*\.?[0-9]+\s*)$',
+                    allow_empty=True,
+                    regexp_desc=_('comma-separated list of positive floating point numbers')),
+                title=_('x-bins count'))
+
+        if diagram_type == 'h2':
+            # x-bins
+            v.add('x' + n + 'b', [validation.Float(allow_empty=True),
+                    validation.Gte(1, allow_empty=True)],
+                title=_('x-bins count'))
+
+            # y-bins
+            v.add('y' + n + 'b', [validation.Float(allow_empty=True),
+                    validation.Gte(1, allow_empty=True)],
+                title=_('y-bins count'))
+
         # rate calculation
         # interval
         v.add('rw' + n, validation.Float(allow_empty=True),

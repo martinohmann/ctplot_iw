@@ -49,6 +49,18 @@ msgstr "Zeitinterval"
 msgid "push"
 msgstr "Schub"
 
+#: wsgi.py
+msgid "x-bins count"
+msgstr "Anzahl der x-bins"
+
+#: wsgi.py
+msgid "y-bins count"
+msgstr "Anzahl der y-bins"
+
+#: wsgi.py
+msgid "comma-separated list of positive floating point numbers"
+msgstr "kommaseparierte Liste von positiven Fließkommazahlen"
+
 #: wsgi.py:204
 msgid "mathplotlib colors and linestyles"
 msgstr "Farbe und Linienstile der mathplotlib"
@@ -112,6 +124,10 @@ msgstr "%s darf nicht leer sein"
 #, python-format
 msgid "%s is no valid expression"
 msgstr "%s ist kein gültiger Ausdruck"
+
+#: validation.py
+msgid "%(title)s has to be greater than or equal to %(value)f"
+msgstr "%(title)s muss größer als oder gleich %(value)f sein"
 
 #: wsgi.py
 msgid "width"

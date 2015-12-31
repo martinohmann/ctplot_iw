@@ -134,6 +134,22 @@ class FloatRange(Range):
         self.castable = Float(**kwargs)
 
 
+class Gte(Validator):
+
+    def __init__(self, val, **kwargs):
+        self.val = val
+        self.allow_empty = kwargs['allow_empty'] if 'allow_empty' in kwargs else None
+
+    def validate(self, name, title, value):
+        if self.allow_empty and value == '':
+            return value
+        if value < self.val:
+            raise ValidationError(
+                _("%(title)s has to be greater than or equal to %(value)f") %
+                { 'title': title, 'value': self.val })
+        return value
+
+
 class Regexp(Validator):
 
     """
@@ -141,15 +157,18 @@ class Regexp(Validator):
     regexp_desc can supply a meaningful transcription
     of the given regexp
     """
-    def __init__(self, regexp, regexp_desc = None):
+    def __init__(self, regexp, **kwargs):
         self.regexp = regexp
         self.re = re.compile(regexp)
-        self.regexp_desc = regexp_desc
+        self.allow_empty = kwargs['allow_empty'] if 'allow_empty' in kwargs else None
+        self.regexp_desc = kwargs['regexp_desc'] if 'regexp_desc' in kwargs else None
 
         if self.regexp_desc == None:
             self.regexp_desc = regexp
 
     def validate(self, name, title, value):
+        if self.allow_empty and value == '':
+            return value
         if not self.re.match(value):
             raise ValidationError(
                 _("%(title)s has to match %(desc)s") %
@@ -167,7 +186,6 @@ class NotEmpty(Validator):
             raise ValidationError(_("%s must not be empty") %
                     title)
         return value
-
 
 
 class OneOf(Validator):
@@ -324,6 +342,7 @@ if __name__ == '__main__':
         'field14': "lat",
         'field15': "p[0] + p[1] * x",
         'field16': "10 < x < 20",
+        'field17': "1.5, 2,6",
     }
 
     v = FormDataValidator(form_data)
@@ -343,6 +362,7 @@ if __name__ == '__main__':
     val = 15
     v.add('field16', Expression(args={var: val}))
     v.add('field2', IntRange(1, 2, exclude_min=True, allow_empty=True))
+    v.add('field17', Regexp('^(\s*[-+]?[0-9]*\.?[0-9]+\s*,)*(\s*[-+]?[0-9]*\.?[0-9]+\s*)$'))
 
     v.validate()
 
