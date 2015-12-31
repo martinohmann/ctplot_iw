@@ -134,6 +134,10 @@ msgid "width"
 msgstr "Breite"
 
 #: wsgi.py
+msgid "outlines"
+msgstr "Konturlinien"
+
+#: wsgi.py
 msgid "height"
 msgstr "Höhe"
 

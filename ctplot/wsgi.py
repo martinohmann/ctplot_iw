@@ -212,6 +212,10 @@ def validate_settings(settings):
                     validation.Gte(1, allow_empty=True)],
                 title=_('y-bins count'))
 
+        # data reduction
+        # TODO: validate condition
+        # v.add('c' + n, ...)
+
         # rate calculation
         # interval
         v.add('rw' + n, validation.Float(allow_empty=True),
@@ -223,6 +227,7 @@ def validate_settings(settings):
 
         # weight
         # TODO: write suitable validator
+        # v.add('rc' + n, ...)
 
         # fit validation
         if diagram_type in ['xy', 'h1', 'p']:
@@ -254,6 +259,17 @@ def validate_settings(settings):
         if diagram_type in ['h1', 'h2']:
             v.add('sb' + n, validation.Regexp('^[nuomspewkxca]*$'),
                 title=_('statistics box'))
+
+        # outline validation
+        if diagram_type == 'h2':
+            v.add('o' + n + 'levels', [validation.Int(allow_empty=True),
+                    validation.Gte(0, allow_empty=True)],
+                title=_('outlines'))
+
+        # width, height and boundarylat
+        if diagram_type == 'map':
+            # TODO: o*width, o*height, o*boundarylat
+            pass
 
         # diagram options
         if diagram_type != 'h2':
