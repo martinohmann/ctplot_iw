@@ -121,8 +121,8 @@ msgstr "%s darf nicht leer sein"
 
 #: validation.py:210
 #, python-format
-msgid "%s is no valid expression"
-msgstr "%s ist kein gültiger Ausdruck"
+msgid "%(title)s is no valid expression, allowed variables: %(vars)s"
+msgstr "%(title)s ist kein gültiger Ausdruck, erlaubte Variables: %(vars)s"
 
 #: validation.py
 msgid "%(title)s has to be greater than or equal to %(value).10g"

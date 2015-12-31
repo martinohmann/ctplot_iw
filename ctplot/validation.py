@@ -223,9 +223,10 @@ class Expression(Validator):
         self.suffix = suffix
         self.transform = transform
         self.safeeval = safeeval()
+        self.args = args
 
         # add args to safeeval's local variables
-        if args != None:
+        if self.args != None:
             for k, v in args.items():
                 self.safeeval[k] = v
 
@@ -240,8 +241,9 @@ class Expression(Validator):
             if self.transform:
                 return result
         except Exception:
-            raise ValidationError(_("%s is no valid expression") %
-                    title)
+            variables = ', '.join(self.args.keys()) if self.args != None else _('none')
+            raise ValidationError(_("%(title)s is no valid expression, allowed variables: %(vars)s") %
+                    { 'title': title, 'vars': variables })
         return value
 
 
