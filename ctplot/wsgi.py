@@ -191,6 +191,18 @@ def validate_settings(settings):
             ],
             title=_('y-variable'))
 
+        # rate calculation
+        # interval
+        v.add('rw' + n, validation.Float(allow_empty=True),
+            title=_('time interval'))
+
+        # push
+        v.add('rs' + n, validation.FloatRange(0, 1, exclude_min=True,
+            allow_empty=True), title=_('push'))
+
+        # weight
+        # TODO: write suitable validator
+
         # fit validation
         if diagram_type in ['xy', 'h1', 'p']:
             # fit parameters

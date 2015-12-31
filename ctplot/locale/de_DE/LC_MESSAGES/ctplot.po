@@ -41,6 +41,14 @@ msgstr "y-Variable"
 msgid "fit function and/or parameters"
 msgstr "Fitfunktion und/oder Parameter"
 
+#: wsgi.py:197
+msgid "time interval"
+msgstr "Zeitinterval"
+
+#: wsgi.py:201
+msgid "push"
+msgstr "Schub"
+
 #: wsgi.py:204
 msgid "mathplotlib colors and linestyles"
 msgstr "Farbe und Linienstile der mathplotlib"
