@@ -43,10 +43,10 @@ class Validator(object):
 
 class Castable(Validator):
 
-    def __init__(self, cast_func = None, allow_empty = False):
+    def __init__(self, cast_func, **kwargs):
         self.cast_func = cast_func
+        self.allow_empty = kwargs['allow_empty'] if 'allow_empty' in kwargs else None
         self.msg_fmt = ''
-        self.allow_empty = allow_empty
 
     def validate(self, name, title, value):
         try:
@@ -68,28 +68,6 @@ class Int(Castable):
         self.msg_fmt = _('%s has to be an integer')
 
 
-class IntRange(Int):
-
-    """
-    Validates if value is an int, before validating range
-    """
-    def __init__(self, rmin, rmax):
-        super(IntRange, self).__init__()
-        self.rmin = rmin
-        self.rmax = rmax
-
-    def validate(self, name, title, value):
-        value = super(IntRange, self).validate(name, title, value)
-        try:
-            if not (self.rmin <= value <= self.rmax):
-                raise ValueError
-        except ValueError:
-            raise ValidationError(
-                _('%(title)s has to be within range [%(min)d..%(max)d]') %
-                { 'title': title, 'min': self.rmin, 'max': self.rmax })
-        return value
-
-
 class Float(Castable):
 
     """
@@ -100,26 +78,60 @@ class Float(Castable):
         self.msg_fmt = _('%s has to be a float value')
 
 
-class FloatRange(Float):
+class Range(Validator):
 
     """
-    Validates if value is a float, before validating range
+    Validates if value is within range
     """
-    def __init__(self, rmin, rmax):
-        super(FloatRange, self).__init__()
+    def __init__(self, rmin, rmax, **kwargs):
         self.rmin = rmin
         self.rmax = rmax
+        self.exclude_min = kwargs['exclude_min'] if 'exclude_min' in kwargs else False
+        self.exclude_max = kwargs['exclude_max'] if 'exclude_max' in kwargs else False
+        self.allow_empty = kwargs['allow_empty'] if 'allow_empty' in kwargs else None
+        self.castable = None
+        self.msg_fmt = _('%(title)s has to be within range [%(min)f..%(max)f]')
 
     def validate(self, name, title, value):
-        value = super(FloatRange, self).validate(name, title, value)
+        if self.allow_empty and value == '':
+            return value
+
+        if self.castable != None:
+            value = self.castable.validate(name, title, value)
         try:
-            if not (self.rmin <= value <= self.rmax):
+            if self.exclude_min and not(self.rmin < value <= self.rmax):
+                raise ValueError
+            elif self.exclude_max and not(self.rmin <= value < self.rmax):
+                raise ValueError
+            elif self.exclude_min and self.exclude_max and not(self.rmin < value < self.rmax):
+                raise ValueError
+            elif not (self.rmin <= value <= self.rmax):
                 raise ValueError
         except ValueError:
-            raise ValidationError(
-                _('%(title)s has to be within range [%(min)f..%(max)f]') %
+            raise ValidationError(self.msg_fmt %
                 { 'title': title, 'min': self.rmin, 'max': self.rmax })
         return value
+
+
+class IntRange(Range):
+
+    """
+    Validates if value is castable to int and within range
+    """
+    def __init__(self, *args, **kwargs):
+        super(IntRange, self).__init__(*args, **kwargs)
+        self.castable = Int(**kwargs)
+        self.msg_fmt = _('%(title)s has to be within range [%(min)d..%(max)d]')
+
+
+class FloatRange(Range):
+
+    """
+    Validates if value is castable to float and within range
+    """
+    def __init__(self, *args, **kwargs):
+        super(FloatRange, self).__init__(*args, **kwargs)
+        self.castable = Float(**kwargs)
 
 
 class Regexp(Validator):
@@ -330,6 +342,7 @@ if __name__ == '__main__':
     var = 'x'
     val = 15
     v.add('field16', Expression(args={var: val}))
+    v.add('field2', IntRange(1, 2, exclude_min=True, allow_empty=True))
 
     v.validate()
 
