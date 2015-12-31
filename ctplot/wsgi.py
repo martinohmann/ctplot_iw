@@ -134,7 +134,11 @@ def serve_plain(data, start_response):
     start_response('200 OK', [content_type(), cc_nocache])
     return [data]
 
+available_tables = None
+
 def validate_settings(settings):
+    global available_tables
+
     errors = {
         'global': [],
         'diagrams': {}
@@ -166,6 +170,7 @@ def validate_settings(settings):
 
         # dataset
         v.add('s' + n, validation.NotEmpty(),
+            stop_on_error=True,
             title=_('dataset'))
 
         # x axis
@@ -212,9 +217,23 @@ def validate_settings(settings):
                     validation.Gte(1, allow_empty=True)],
                 title=_('y-bins count'))
 
+        if not available_tables or time() - available_tables[0] > 86400:
+            available_tables = time(), plot.available_tables(get_config()['datadir'])
+
+        # get permitted variables
+        permitted_vars = None
+        for filename, dataset in available_tables[1].iteritems():
+            if filename == settings['s' + n]:
+                permitted_vars = {}
+                # init dummy vars to 1
+                for cn in dataset.colnames:
+                    permitted_vars[cn] = 1
+
         # data reduction
-        # TODO: validate condition
-        # v.add('c' + n, ...)
+        # condition
+        v.add('c' + n,
+            validation.Expression(transform=False, args=permitted_vars),
+            title=_('condition'))
 
         # rate calculation
         # interval
@@ -226,8 +245,9 @@ def validate_settings(settings):
             allow_empty=True), title=_('push'))
 
         # weight
-        # TODO: write suitable validator
-        # v.add('rc' + n, ...)
+        v.add('rc' + n,
+            validation.Expression(transform=False, args=permitted_vars),
+            title=_('weight'))
 
         # fit validation
         if diagram_type in ['xy', 'h1', 'p']:
@@ -276,7 +296,7 @@ def validate_settings(settings):
                 title=_('detail height'))
 
             v.add('o' + n + 'boundarylat', validation.FloatRange(-90, 90,
-                    exclude_min=True, exclude_max=True),
+                    exclude_min=True, exclude_max=True, allow_empty=True),
                 title=_('boundary latitude for (N/S) polar'))
 
         # diagram options
@@ -349,8 +369,6 @@ def make_plot(settings, config):
 
 def randomChars(n):
     return ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for _ in range(n))
-
-available_tables = None
 
 def handle_action(environ, start_response, config):
     global available_tables

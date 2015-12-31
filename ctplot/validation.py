@@ -225,8 +225,9 @@ class Expression(Validator):
         self.safeeval = safeeval()
 
         # add args to safeeval's local variables
-        for k, v in args.items():
-            self.safeeval[k] = v
+        if args != None:
+            for k, v in args.items():
+                self.safeeval[k] = v
 
 
     def validate(self, name, title, value):

@@ -50,6 +50,10 @@ msgid "push"
 msgstr "Schub"
 
 #: wsgi.py
+msgid "weight"
+msgstr "Gewicht"
+
+#: wsgi.py
 msgid "x-bins count"
 msgstr "Anzahl der x-bins"
 
@@ -131,6 +135,10 @@ msgstr "Breite"
 #: wsgi.py
 msgid "outlines"
 msgstr "Konturlinien"
+
+#: wsgi.py
+msgid "condition"
+msgstr "Bedingung"
 
 #: wsgi.py
 msgid "detail height"
