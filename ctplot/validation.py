@@ -45,7 +45,7 @@ class Castable(Validator):
 
     def __init__(self, cast_func, **kwargs):
         self.cast_func = cast_func
-        self.allow_empty = kwargs['allow_empty'] if 'allow_empty' in kwargs else None
+        self.allow_empty = kwargs.get('allow_empty', False)
         self.msg_fmt = ''
 
     def validate(self, name, title, value):
@@ -86,9 +86,9 @@ class Range(Validator):
     def __init__(self, rmin, rmax, **kwargs):
         self.rmin = rmin
         self.rmax = rmax
-        self.exclude_min = kwargs['exclude_min'] if 'exclude_min' in kwargs else False
-        self.exclude_max = kwargs['exclude_max'] if 'exclude_max' in kwargs else False
-        self.allow_empty = kwargs['allow_empty'] if 'allow_empty' in kwargs else None
+        self.exclude_min = kwargs.get('exclude_min', False)
+        self.exclude_max = kwargs.get('exclude_max', False)
+        self.allow_empty = kwargs.get('allow_empty', False)
         self.castable = None
         self.l = ']' if self.exclude_min else '['
         self.r = '[' if self.exclude_max else ']'
@@ -140,7 +140,7 @@ class Gte(Validator):
 
     def __init__(self, val, **kwargs):
         self.val = val
-        self.allow_empty = kwargs['allow_empty'] if 'allow_empty' in kwargs else None
+        self.allow_empty = kwargs.get('allow_empty', False)
 
     def validate(self, name, title, value):
         if self.allow_empty and value == '':
@@ -162,8 +162,8 @@ class Regexp(Validator):
     def __init__(self, regexp, **kwargs):
         self.regexp = regexp
         self.re = re.compile(regexp)
-        self.allow_empty = kwargs['allow_empty'] if 'allow_empty' in kwargs else None
-        self.regexp_desc = kwargs['regexp_desc'] if 'regexp_desc' in kwargs else None
+        self.allow_empty = kwargs.get('allow_empty', False)
+        self.regexp_desc = kwargs.get('regexp_desc', None)
 
         if self.regexp_desc == None:
             self.regexp_desc = regexp
@@ -282,8 +282,8 @@ class FormDataValidator(DataValidator):
                     (name, str(validator)))
 
         if not name in self.fields:
-            title = kwargs['title'] if 'title' in kwargs else name
-            stop = kwargs['stop_on_error'] if 'stop_on_error' in kwargs else False
+            title = kwargs.get('title', name)
+            stop = kwargs.get('stop_on_error', False)
             self.fields[name] = {
                 'stop_on_error': stop,
                 'title': title,
@@ -294,7 +294,7 @@ class FormDataValidator(DataValidator):
 
     def validate(self):
         for name in self.fields:
-            title = self.fields[name]['title']
+            title = self.fields[name].get('title')
 
             if self.strict and not name in self.form_data:
                 raise ValidationError('%s not found in form data' % title)
@@ -317,7 +317,7 @@ class FormDataValidator(DataValidator):
                     # it is sufficient to add the first error of each field to
                     # the error list
                     self.errors.append(str(e))
-                    if self.fields[name]['stop_on_error']:
+                    if self.fields[name].get('stop_on_error'):
                         return False
                     break
 

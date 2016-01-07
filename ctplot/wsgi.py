@@ -8,6 +8,7 @@ from time import  time
 from cgi import FieldStorage
 from threading import Lock
 from pkg_resources import resource_string, resource_exists, resource_isdir, resource_listdir
+from itertools import product
 
 import matplotlib
 matplotlib.use('Agg')  # headless backend
@@ -139,10 +140,7 @@ available_tables = None
 def validate_settings(settings):
     global available_tables
 
-    errors = {
-        'global': [],
-        'diagrams': {}
-    }
+    errors = { 'global': [], 'diagrams': {} }
     valid = True
 
     try:
@@ -151,6 +149,9 @@ def validate_settings(settings):
     except Exception:
         errors['global'].append(_('no plots detected'))
         return [False, errors]
+
+    if not available_tables or time() - available_tables[0] > 86400:
+        available_tables = time(), plot.available_tables(get_config()['datadir'])
 
     print settings
     diagram_type_0 = settings['m0']
@@ -216,9 +217,6 @@ def validate_settings(settings):
             v.add('y' + n + 'b', [validation.Float(allow_empty=True),
                     validation.Gte(1, allow_empty=True)],
                 title=_('y-bins count'))
-
-        if not available_tables or time() - available_tables[0] > 86400:
-            available_tables = time(), plot.available_tables(get_config()['datadir'])
 
         # get permitted variables
         permitted_vars = None
@@ -316,27 +314,22 @@ def validate_settings(settings):
     v = validation.FormDataValidator(settings)
 
     # x/y/z-ranges: min/max
-    for ar in ['xr', 'yr', 'zr']:
-        for m in ['min', 'max']:
-            field = ar + '-' + m
-            if field in settings:
-                v.add(field, validation.Float(),
-                    title=_(field))
+    for a, m in product(['xr', 'yr', 'zr'], ['min', 'max']):
+        field = a + '-' + m
+        if field in settings:
+            v.add(field, validation.Float(), title=_(field))
 
     # twin axis: x2/y2-ranges: min/max
-    for ar in ['xrtw', 'yrtw']:
-        for m in ['min', 'max']:
-            field = ar + '-' + m
-            if field in settings:
-                v.add(field, validation.Float(),
-                    title=_(field))
+    for a, m in product(['xrtw', 'yrtw'], ['min', 'max']):
+        field = a + '-' + m
+        if field in settings:
+            v.add(field, validation.Float(), title=_(field))
 
     # width, height
     for wh in ['width', 'height']:
         field = wh[0]
         if field in settings:
-            v.add(field, validation.Float(),
-                title=_(wh))
+            v.add(field, validation.Float(), title=_(wh))
 
     valid = v.validate() and valid
     errors['global'] = v.get_errors()
