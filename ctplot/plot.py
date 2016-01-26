@@ -755,10 +755,13 @@ class Plot(object):
         else:
             args = (y,)
 
-
         if z is None:
             l, = plt.plot(*args, **kwargs)
         else:
+            # linestyle must not be 'none' when plotting 3D
+            if 'linestyle' in kwargs and kwargs['linestyle'] == 'none':
+                kwargs['linestyle'] = ':'
+
             o = get_args_from(kwargs, markersize = 2, cbfrac = 0.04, cblabel = self.z[i])
             l = plt.scatter(x, y, c = z, s = o.markersize ** 2, edgecolor = 'none', **kwargs)
 
@@ -960,6 +963,10 @@ class Plot(object):
         if z is None:
             l, = plt.plot(x, y, **kwargs)
         else:
+            # linestyle must not be 'none' when plotting 3D
+            if 'linestyle' in kwargs and kwargs['linestyle'] == 'none':
+                kwargs['linestyle'] = ':'
+
             o = get_args_from(kwargs, markersize = 6, cbfrac = 0.04, cblabel = self.alabel('z'))
             p = set_defaults(kwargs, zorder = 100)
             l = plt.scatter(x, y, c = z, s = o.markersize ** 2, edgecolor = 'none', **p)
