@@ -45,6 +45,10 @@ def get_config():
         if ek in env:
             _config[k] = env[ek]
 
+    _config['debug'] = True if (prefix + 'debug').upper() in env else False
+
+    log.debug('config: {}'.format(_config))
+
     return _config
 
 def getpath(environ):
@@ -357,7 +361,7 @@ def make_plot(settings, config):
     name = os.path.join(config['plotdir'], basename).replace('\\', '/')
 
     # try to get plot from cache
-    if config['cachedir'] and os.path.isfile(name + '.png'):
+    if not config['debug'] and config['cachedir'] and os.path.isfile(name + '.png'):
         return [dict([(e, name + '.' + e) for e in ['png', 'svg', 'pdf']]), None]
     else:
         # lock long running plot creation
