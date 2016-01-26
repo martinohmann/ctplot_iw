@@ -17,8 +17,8 @@ from setuptools import setup, find_packages
 #   http://peak.telecommunity.com/DevCenter/PythonEggs#accessing-package-resources
 from pkg_resources import resource_string, resource_filename, require
 
-required_libs = ['matplotlib >=1.1', 'numpy >=0.9', 'scipy >=0.12', 'pytz', 'numexpr >=1.4', 
-                 'tables >=2.2', 'python-dateutil >=1.5', 'pil >=1.1', 'basemap >=1.0', 'locket']
+required_libs = ['matplotlib >=1.1', 'numpy >=0.9', 'scipy >=0.12', 'pytz', 'numexpr >=1.4',
+                 'tables >=2.2', 'python-dateutil >=1.5', 'Pillow >=3.1.0', 'basemap >=1.0', 'locket']
 
 def readme(name):
     """Utility function to read the README file.
@@ -59,7 +59,7 @@ setup(
     packages = find_packages(),
     long_description = readme('README.md'),
     install_requires = required_libs,
-    extra_require = { 
+    extra_require = {
                         'server': ['tornado']
     },
     entry_points = {'console_scripts':[
