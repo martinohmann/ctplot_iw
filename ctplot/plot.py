@@ -541,23 +541,31 @@ class Plot(object):
         fig = plt.gcf()
         sx, sy = fig.get_size_inches() * fig.dpi
 
-        # textboxes
-        cx = 0
+        # check if we have a second y-axis
+        have_ytw = False
+        for tw in self.tw:
+            if tw == 'y':
+                have_ytw = True
+                break
+
+        # draw textboxes
+        cxw = 0
+        cx = sx + 50 if have_ytw else sx
         cy = sy
         for i, t in enumerate(self.textboxes):
-            label = plt.annotate(t, (sx, cy), xycoords = 'axes pixels',
+            label = plt.annotate(t, (cx, cy), xycoords = 'axes pixels',
                 family = 'monospace', size = 'small',
                 horizontalalignment = 'left', verticalalignment = 'top',
                 bbox = dict(facecolor = 'w', alpha = 0.8, boxstyle = "round,pad=0.5"),
                 annotation_clip = False)
             extents = label.get_window_extent(fig.canvas.get_renderer()).extents
             w = extents[2] - extents[0]
-            if w > cx:
-                cx = w
+            if w > cxw:
+                cxw = w
             cy -= sy * 0.25
 
-        # fitboxes
-        cx = cx + sx + 40 if len(self.textboxes) else sx
+        # draw fitboxes
+        cx = cxw + cx + 50 if len(self.textboxes) else cx
         cy = sy
         for i, t in enumerate(self.fitboxes):
             plt.annotate(t, (cx, cy), xycoords = 'axes pixels',
