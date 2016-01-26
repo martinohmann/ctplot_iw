@@ -533,7 +533,7 @@ class Plot(object):
         if self.l != 'none' and 'map' not in self.m :
             lines = [v[0] for v in self.legend]
             labels = [v[1] for v in self.legend]
-            leg = plt.legend(lines, labels, loc = self.l or 'best', fancybox = True)
+            leg = plt.legend(lines, labels, loc = self.l or 'best', fancybox = True, numpoints = 1)
             plt.setp(leg.get_texts(), fontsize = self.f)
             leg.get_frame().set_alpha(0.8)
 
