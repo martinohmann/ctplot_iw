@@ -155,8 +155,14 @@ def validate_settings(settings):
         pc = int(settings['plots'])
         if pc < 1: raise Exception
     except Exception:
-        errors['global'].append(_('no plots detected'))
-        return [False, errors]
+        pc = 0
+        for k in settings.keys():
+            if k.startswith('experiment'):
+                pc += 1
+
+        if pc == 0:
+            errors['global'].append(_('no plots detected'))
+            return [False, errors]
 
     if not available_tables or time() - available_tables[0] > 86400:
         available_tables = time(), plot.available_tables(get_config()['datadir'])
@@ -397,7 +403,7 @@ def handle_action(environ, start_response, config):
         except Exception as e:
             return serve_json({
                 'errors': {
-                    'global': [_('unknown error') + ': ' + str(e)]
+                    'global': [_('unknown error')]
                 }
             }, start_response)
 
