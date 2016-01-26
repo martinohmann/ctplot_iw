@@ -711,7 +711,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     function addPlotToSaved(settings) {
         console.debug('* add plot to saved');
         var plotImg = $('<img src="' + settings.url + '" href="' + settings.url + '" title="' + settings.t + '">'),
-            delBtn = $('<i class="fa fa-close fa-2x icon-red"></i>').attr('title', 'Plot löschen'),
+            delBtn = $('<i class="del-btn inverse"></i>').attr('title', 'Plot löschen'),
             loadBtn = $('<i class="fa fa-repeat fa-2x icon-green"></i>').attr('title', 'Plot laden'),
             btnContainer = $('<span class="btns">');
 
