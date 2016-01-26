@@ -401,6 +401,7 @@ def handle_action(environ, start_response, config):
         try:
             images, errors = make_plot(settings, config)
         except Exception as e:
+            log.exception(e)
             return serve_json({
                 'errors': {
                     'global': [_('unknown error')]
