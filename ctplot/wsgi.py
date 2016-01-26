@@ -389,7 +389,7 @@ def handle_action(environ, start_response, config):
 
         settings = {}
         for k in fields.keys():
-            if k[0] in 'xyzcmsorntwhfglp':
+            if k[0] in 'xyzcmsorntwhfglp' or k[:10] == 'experiment':
                 settings[k] = fields.getfirst(k).strip().decode('utf8', errors = 'ignore')
 
         try:
