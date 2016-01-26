@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf8
 
-import os, json, random, string
+import os, json, random, string, logging
 from os.path import join, abspath, basename
 from mimetypes import guess_type
 from time import  time
@@ -17,6 +17,10 @@ import plot
 import validation
 from utils import hashargs
 from i18n import _
+
+logging.basicConfig(level = logging.DEBUG, format = '%(filename)s:%(funcName)s:%(lineno)d:%(message)s')
+
+log = logging.getLogger('wsgi')
 
 _config = None
 
@@ -153,16 +157,22 @@ def validate_settings(settings):
     if not available_tables or time() - available_tables[0] > 86400:
         available_tables = time(), plot.available_tables(get_config()['datadir'])
 
-    print settings
-    diagram_type_0 = settings['m0']
+    log.debug('settings to validate: {}'.format(settings))
+
+    m0 = settings['m0']
 
     for N in xrange(pc):
         n = str(N)
 
         v = validation.FormDataValidator(settings)
 
+        # experiment
+        v.add('experiment' + n, validation.NotEmpty(),
+            stop_on_error=True,
+            title=_('experiment'))
+
         # diagram type
-        v.add('m' + n, validation.Regexp('^'+diagram_type_0+'$',
+        v.add('m' + n, validation.Regexp('^' + m0 + '$',
             regexp_desc=_("diagram type of the first dataset")),
             stop_on_error=True,
             title=_('diagram type'))
@@ -220,12 +230,13 @@ def validate_settings(settings):
 
         # get permitted variables
         permitted_vars = None
-        for filename, dataset in available_tables[1].iteritems():
-            if filename == settings['s' + n]:
-                permitted_vars = {}
-                # init dummy vars to 1
-                for cn in dataset.colnames:
-                    permitted_vars[cn] = 1
+        if 's' + n in settings:
+            for filename, dataset in available_tables[1].iteritems():
+                if filename == settings['s' + n]:
+                    permitted_vars = {}
+                    # init dummy vars to 1
+                    for cn in dataset.colnames:
+                        permitted_vars[cn] = 1
 
         # data reduction
         # condition
@@ -307,7 +318,7 @@ def validate_settings(settings):
             v.add('o' + n + 'linewidth', validation.Float(allow_empty=True),
                 title=_('line width'))
 
-        valid = v.validate() and valid
+        valid = (v.validate() and valid)
         errors['diagrams'][n] = v.get_errors()
 
     # global fields
@@ -331,9 +342,9 @@ def validate_settings(settings):
         if field in settings:
             v.add(field, validation.Float(), title=_(wh))
 
-    valid = v.validate() and valid
+    valid = (v.validate() and valid)
     errors['global'] = v.get_errors()
-    print errors
+    log.debug('validation errors: {}'.format(errors))
 
     # validate
     return [valid, errors]

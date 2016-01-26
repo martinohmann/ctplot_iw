@@ -26,8 +26,12 @@ msgid "diagram type of the first dataset"
 msgstr "Darstellungsform der ersten Datenreihe"
 
 #: wsgi.py:170
+msgid "experiment"
+msgstr "Experiment"
+
+#: wsgi.py:170
 msgid "dataset"
-msgstr "Datenreihe"
+msgstr "Datenatz"
 
 #: wsgi.py:174 wsgi.py:219
 msgid "x-variable"
