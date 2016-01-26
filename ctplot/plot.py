@@ -729,16 +729,16 @@ class Plot(object):
 
             # add textbox
             t = 'y=' + ff
-            t += '\n$\\chi^2$/N = {}/{}'.format(number_format(chi2), number_format(N))
+            t += '\n$\\chi^2$/N = {}/{}'.format(number_mathformat(chi2), number_mathformat(N))
             for k, v in enumerate(p):
                 try:
-                    t += '\np[{}] = {}$\\pm${}'.format(k, number_format(v), number_format(np.sqrt(c[k, k])))
+                    t += '\np[{}] = {}$\\pm${}'.format(k, number_mathformat(v), number_mathformat(np.sqrt(c[k, k])))
                 except:
                     t += '\np[{}] = {}$\\pm${}'.format(k, v, c)
             self.fitboxes.append(t)
             ll = ('Fit' + fit_status + ' y=' + ff)
             for k, v in  enumerate(p):
-                ll = ll.replace('p[{}]'.format(k), number_format(v, 3))
+                ll = ll.replace('p[{}]'.format(k), number_mathformat(v, 3))
             self.legend.append((l, ll))
 
 
@@ -1004,7 +1004,7 @@ class Plot(object):
         for k in sb:
             k = stats_abrv[k]
             if k in stats:
-                text += '\n{:6} {}'.format(_(k), number_format(stats[k]))
+                text += '\n{:6} {}'.format(_(k), number_mathformat(stats[k]))
         self.textboxes.append(text)
 
     def stats_fields2d(self, i, contents, xcenters, ycenters):
@@ -1030,9 +1030,9 @@ class Plot(object):
             if k in stats:
                 v = stats[k]
                 try:
-                    v = number_format(v)
+                    v = number_mathformat(v)
                 except:
-                    v = '({})'.format(','.join(map(number_format, v)))
+                    v = '({})'.format(','.join(map(number_mathformat, v)))
                 text += '\n{:6} {}'.format(_(k), v)
         self.textboxes.append(text)
 

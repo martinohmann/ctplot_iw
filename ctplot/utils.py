@@ -14,7 +14,7 @@
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import pytz, json, time, re, os
 import dateutil.parser as dp
@@ -157,7 +157,7 @@ def number_format(value, precision = 4):
             return se
 
 def number_mathformat(value, precision = 4):
-    s = re.sub('[eE](.*)', 'x10^{\\1}', number_format(value, precision))
+    s = re.sub('[eE](.*)', '*10^{\\1}', number_format(value, precision))
     s = re.sub('^1[ .]*x', '', s)
     return '$\mathdefault{' + s + '}$'
 
