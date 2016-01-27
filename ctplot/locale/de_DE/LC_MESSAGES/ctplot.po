@@ -126,7 +126,7 @@ msgstr "%s darf nicht leer sein"
 #: validation.py:210
 #, python-format
 msgid "%(title)s is no valid expression, allowed variables: %(vars)s"
-msgstr "%(title)s ist kein gültiger Ausdruck, erlaubte Variables: %(vars)s"
+msgstr "%(title)s ist kein gültiger Ausdruck, erlaubte Variablen: %(vars)s"
 
 #: validation.py
 msgid "%(title)s has to be greater than or equal to %(value).10g"
@@ -139,6 +139,10 @@ msgstr "Breite"
 #: wsgi.py
 msgid "outlines"
 msgstr "Konturlinien"
+
+#: wsgi.py
+msgid "adjustment funktion for %(axis)s-variable"
+msgstr "Korrketurfunktion für %(axis)s-Variable"
 
 #: wsgi.py
 msgid "condition"
