@@ -8,11 +8,12 @@ from ctplot.wsgi import application
 
 
 def main():
+    address = os.environ['CTPLOT_ADDRESS'] if 'CTPLOT_ADDRESS' in os.environ else ''
     port = int(os.environ['CTPLOT_PORT']) if 'CTPLOT_PORT' in os.environ else 8080
-    print 'listening on', port
+    print 'listening on %s:%d' % (address, port)
 
     http_server = HTTPServer(WSGIContainer(application))
-    http_server.listen(port)
+    http_server.listen(port, address=address)
     IOLoop.instance().start()
 
 if __name__ == '__main__':

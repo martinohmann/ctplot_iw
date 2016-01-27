@@ -53,7 +53,7 @@ To run ctplot as simple CGI script with [mod_cgi](http://httpd.apache.org/docs/c
 and put it into your server tree and register it with a CGI handler. 
 
 ### Run as standalone app
-Run `ctserver` (depends on [tornado](http://www.tornadoweb.org)) to run ctplot as standalone webserver. You may set the environment variable `CTPLOT_PORT` to set a port different from the default of 8080.
+Run `ctserver` (depends on [tornado](http://www.tornadoweb.org)) to run ctplot as standalone webserver. You may set the environment variable `CTPLOT_PORT` to set a port different from the default of 8080 and `CTPLOT_ADDRESS` to specify a listening address. If `CTPLOT_ADDRESS` is not set, the webserver will listen on all addresses.
 
 
 ## Run as Docker container
