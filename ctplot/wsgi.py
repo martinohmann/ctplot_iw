@@ -248,6 +248,12 @@ def validate_settings(settings):
                     for cn in dataset.colnames:
                         permitted_vars[cn] = 1
 
+        # x/y/z adjustment function
+        for ax in 'xyz':
+            v.add(ax + n + 'a',
+                validation.Expression(transform=False, args=permitted_vars),
+                title=_('adjustment funktion for %(axis)s-variable') % { 'axis': ax })
+
         # data reduction
         # condition
         v.add('c' + n,

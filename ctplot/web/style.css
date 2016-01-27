@@ -642,6 +642,7 @@ body.firefox .plot .delplot {
   border-radius: 4px;
   font-size: 30px;
   line-height: 24px;
+  font-style: normal;
 }
 
 .del-btn:before {

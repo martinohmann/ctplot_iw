@@ -112,6 +112,9 @@
                                 <label class="required" data-help="Wert, der auf der x-Achse dargestellt werden soll. Hier kann ein Variablenname eingegeben werden (z.B. time) oder eine Formel, die Variablen umrechnet oder miteinander verknüpft (z.B. T_a-T_i oder log(p))"> x-Variable
                                     <select name="x*"></select>
                                 </label>
+                                <label data-help="Korrekturfunktion für x-Variable" class="expert">Korrekturfunktion für x-Variable
+                                    <input type="text" name="x*a">
+                                </label>
                                 <label data-help="Unterteilung der x-Achse in Bins. Angabe einer Zahl n bedeutet, dass automatisch n Bins gewählt werden, die die Daten enthalten (z.B. 10 erzeugt 10 Bins). Angabe von drei durch Komma getrennten Zahlen a,b,n erzeugt n Bins mit linker Kante a und rechter Kante b. Angabe von mehr als drei durch Komma getrennten Zahlen erzeugt Bins mit den Binkanten auf den angegebenen Werten" class="t-h1 t-h2 t-p advanced"> Anzahl der x-Bins
                                     <input type="text" name="x*b">
                                 </label>
@@ -120,6 +123,9 @@
                                 </label>
                                 <label data-help="Wert, der auf der y-Achse dargestellt werden soll, analog zu x" class="required t-xy t-h2 t-p t-map">y-Variable
                                     <select name="y*"></select>
+                                </label>
+                                <label data-help="Korrekturfunktion für y-Variable" class="t-xy t-h2 t-map t-p expert">Korrekturfunktion für y-Variable
+                                    <input type="text" name="y*a">
                                 </label>
                                 <label data-help="Unterteilung der y-Achse in Bins, analog zu x-Bins" class="t-h2 advanced">Anzahl der y-Bins
                                     <input type="text" name="y*b">
@@ -135,6 +141,9 @@
                                     </select> </label>
                                 <label data-help="Wert, der auf der z-Achse dargestellt werden soll, analog zu x, die Werte werden als Farbe der Datenpunkte dargestellt" class="t-xy t-map">z-Variable
                                     <select name="z*"></select>
+                                </label>
+                                <label data-help="Korrekturfunktion für z-Variable" class="t-xy t-map expert">Korrekturfunktion für  z-Variable
+                                    <input type="text" name="z*a">
                                 </label>
                                 <h2 class="advanced">Datenanalyse</h2>
                                 <h3 class="advanced" >Datenreduktion</h3>

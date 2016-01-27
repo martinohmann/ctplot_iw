@@ -178,6 +178,10 @@ class Plot(object):
             self._append('fp', _get(kwargs, 'fp' + n))
             self._append('fl', _get(kwargs, 'fl' + n))
 
+            # x-, y- and z-adjustment expression
+            for v, w in product('xyz', 'a'):
+                self._append(v + w, _get(kwargs, v + n + w))
+
             # x- and y-binnings for histograms/profile
             for v, w in product('xy', 'b'):
                 self._append(v + w, _get(kwargs, v + n + w))
@@ -241,8 +245,9 @@ class Plot(object):
             if s:
                 if s not in expr_data:
                     expr_data[s] = {}  #  add dict for every unique source s (plot n)
-                for v in 'xyzc':
+                for v in ['x', 'y', 'z', 'c', 'xa', 'ya', 'za']:
                     expr = getattr(self, v)[n]  # x/y/z/c expression for source s (plot n)
+                    log.debug('{}{}, expr: {}'.format(v, n, expr))
                     if expr:
                         expr_data[s][expr] = []
                     if v == 'c':
@@ -264,13 +269,13 @@ class Plot(object):
 
 
         # assing data arrays to x/y/z/c-data fields
-        for v in 'xyzc':
+        for v in ['x', 'y', 'z', 'c', 'xa', 'ya', 'za']:
             setattr(self, v + 'data', [(expr_data[self.sr[i]][x] if x and self.sr[i] else None) for i, x in enumerate(getattr(self, v))])
             setattr(self, v + 'unit', [(units[self.sr[i]][x] if x and self.sr[i] else None) for i, x in enumerate(getattr(self, v))])
 
         log.debug('source={}'.format(self.s))
         log.debug('srcavg={}'.format(self.sr))
-        for v in 'xyzc':
+        for v in ['x', 'y', 'z', 'c', 'xa', 'ya', 'za']:
             log.debug(' {}data {}'.format(v, [len(x) if x is not None else None for x in getattr(self, v + 'data')]))
 #            log.debug(' {}unit {}'.format(v, [x for x in getattr(self, v + 'unit')]))
 
@@ -578,6 +583,14 @@ class Plot(object):
 
     def data(self, i):
         x, y, z, c = self.xdata[i], self.ydata[i], self.zdata[i], self.cdata[i]
+        xa, ya, za = self.xadata[i], self.yadata[i], self.zadata[i]
+
+        if xa is not None:
+            x = xa
+        if ya is not None:
+            y = ya
+        if za is not None:
+            z = za
         if c is not None:
             if x is not None: x = x[c]
             if y is not None: y = y[c]
