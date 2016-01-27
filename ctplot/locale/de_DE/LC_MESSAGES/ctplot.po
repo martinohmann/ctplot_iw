@@ -141,7 +141,7 @@ msgid "outlines"
 msgstr "Konturlinien"
 
 #: wsgi.py
-msgid "adjustment funktion for %(axis)s-variable"
+msgid "adjustment function for %(axis)s-variable"
 msgstr "Korrketurfunktion für %(axis)s-Variable"
 
 #: wsgi.py

@@ -252,7 +252,7 @@ def validate_settings(settings):
         for ax in 'xyz':
             v.add(ax + n + 'a',
                 validation.Expression(transform=False, args=permitted_vars),
-                title=_('adjustment funktion for %(axis)s-variable') % { 'axis': ax })
+                title=_('adjustment function for %(axis)s-variable') % { 'axis': ax })
 
         # data reduction
         # condition
