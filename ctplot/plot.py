@@ -652,10 +652,15 @@ class Plot(object):
         l = u''
         exprs = getattr(self, a)
         units = getattr(self, a + 'unit')
+        adjust_funcs = getattr(self, a + 'a')
         for i, x in enumerate(exprs):
             if t and self.tw[i] != a: continue
             if not t and self.tw[i] == a: continue
-            if x and x not in l: l += u', {} [{}]'.format(x, units[i])
+            if x:
+                if x not in l:
+                    l += u', {} [{}]'.format(x, units[i])
+                if adjust_funcs[i]:
+                    l += u' ({})'.format(adjust_funcs[i])
 
         return l[2:]
 
