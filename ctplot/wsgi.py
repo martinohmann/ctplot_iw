@@ -238,7 +238,7 @@ def validate_settings(settings):
                     validation.Gte(1, allow_empty=True)],
                 title=_('y-bins count'))
 
-        # get permitted variables
+        # get permitted expression variables
         permitted_vars = None
         if 's' + n in settings:
             for filename, dataset in available_tables[1].iteritems():
@@ -408,11 +408,7 @@ def handle_action(environ, start_response, config):
             images, errors = make_plot(settings, config)
         except Exception as e:
             log.exception(e)
-            return serve_json({
-                'errors': {
-                    'global': [_('unknown error')]
-                }
-            }, start_response)
+            errors = { 'global': [_('unknown error')] }
 
         if errors:
             return serve_json({ 'errors': errors }, start_response)

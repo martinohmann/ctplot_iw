@@ -546,16 +546,24 @@ class Plot(object):
         fig = plt.gcf()
         sx, sy = fig.get_size_inches() * fig.dpi
 
-        # check if we have a second y-axis
-        have_ytw = False
-        for tw in self.tw:
-            if tw == 'y':
-                have_ytw = True
-                break
-
         # draw textboxes
         cxw = 0
-        cx = sx + 50 if have_ytw else sx
+        cx = sx
+
+        # add offset if we have a second y-axis
+        for tw in self.tw:
+            if tw == 'y':
+                cx += 50
+                break
+
+        # add offset if we have a z-axis
+        # only if offset hasn't been added yet
+        if cx == sx:
+            for z in self.z:
+                if z != None:
+                    cx += 50
+                    break
+
         cy = sy
         for i, t in enumerate(self.textboxes):
             label = plt.annotate(t, (cx, cy), xycoords = 'axes pixels',
