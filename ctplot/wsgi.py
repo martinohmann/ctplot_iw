@@ -247,6 +247,9 @@ def validate_settings(settings):
                     # init dummy vars to 1
                     for cn in dataset.colnames:
                         permitted_vars[cn] = 1
+                    if ('rw' + n) in settings and settings['rw' + n]:
+                        for cn in ['rate', 'count', 'weight']:
+                            permitted_vars[cn] = 1
 
         # x/y/z adjustment function
         for ax in 'xyz':

@@ -599,7 +599,7 @@ class Plot(object):
             y = ya
         if za is not None:
             z = za
-        if c is not None:
+        if c is not None and len(c) > 0:
             if x is not None: x = x[c]
             if y is not None: y = y[c]
             if z is not None: z = z[c]
@@ -791,7 +791,7 @@ class Plot(object):
             if 'linestyle' in kwargs and kwargs['linestyle'] == 'none':
                 kwargs['linestyle'] = ':'
 
-            o = get_args_from(kwargs, markersize = 2, cbfrac = 0.04, cblabel = self.z[i])
+            o = get_args_from(kwargs, markersize = 2, cbfrac = 0.04, cblabel = self.alabel('z'))
             l = plt.scatter(x, y, c = z, s = o.markersize ** 2, edgecolor = 'none', **kwargs)
 
             m = 6.0

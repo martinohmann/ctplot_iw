@@ -28,7 +28,10 @@ for k in []:
 
 # numpy functions
 for k, v in np.__dict__.iteritems():
-    _safe_locals[k] = getattr(np, k)
+    # do not numpy's financial rate function to safe locals, as it may clash
+    # with ctplot's 'rate' parameter
+    if k != 'rate':
+        _safe_locals[k] = getattr(np, k)
 
 _safe_locals['logbins'] = lambda start, stop, count: [np.exp(x) for x in np.linspace(np.log(start), np.log(stop), count)]
 _safe_locals['since04'] = lambda s: (dp.parse(s) - dp.parse('2004-01-01 00:00 +01')).total_seconds()
