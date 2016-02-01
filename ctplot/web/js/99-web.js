@@ -291,7 +291,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     function addHandlers(plot) {
         console.debug('* add handlers');
         // display available vars on certain input fields
-        plot.find(':input').filter(function() {
+        /*plot.find(':input').filter(function() {
             return $(this).attr('name').match(/^(c|[xyz]\d+a)/)
         }).focusin(function() {
             var p = $(this).parents('.plot'),
@@ -316,7 +316,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             });
         }).focusout(function() {
             $('#varsbox').hide();
-        });
+        });*/
 
         // add colorpicker
         plot.find(':input[name$="color"]').each(function() {
