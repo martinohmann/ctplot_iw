@@ -2,6 +2,7 @@
 # coding: utf8
 
 import os, json, random, string, logging
+from numbers import Number
 from os.path import join, abspath, basename
 from mimetypes import guess_type
 from time import  time
@@ -254,13 +255,21 @@ def validate_settings(settings):
         # x/y/z adjustment function
         for ax in 'xyz':
             v.add(ax + n + 'a',
-                validation.Expression(transform=False, args=permitted_vars),
+                validation.Expression(
+                    transform=False,
+                    args=permitted_vars,
+                    return_type=Number
+                ),
                 title=_('adjustment function for %(axis)s-variable') % { 'axis': ax })
 
         # data reduction
         # condition
         v.add('c' + n,
-            validation.Expression(transform=False, args=permitted_vars),
+            validation.Expression(
+                transform=False,
+                args=permitted_vars,
+                return_type=bool
+            ),
             title=_('condition'))
 
         # rate calculation
@@ -291,7 +300,8 @@ def validate_settings(settings):
             v.add('ff' + n,
                 validation.Expression(
                     transform=False,
-                    args = { 'x': 1, 'p': fp }
+                    args={ 'x': 1, 'p': fp },
+                    return_type=Number
                 ),
                 title=_('fit function and/or parameters'))
 

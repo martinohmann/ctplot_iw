@@ -17,12 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import logging
 import re
 from collections import OrderedDict
 from copy import deepcopy
 
 from i18n import _
 from safeeval import safeeval
+
+logging.basicConfig(level = logging.DEBUG, format = '%(filename)s:%(funcName)s:%(lineno)d:%(message)s')
+log = logging.getLogger('validation')
 
 class ValidationError(Exception):
     pass
@@ -218,10 +222,11 @@ class Expression(Validator):
     if 'transform' is set to False, the expression will be evaluated,
     but the result will not be stored into the form_data dict
     """
-    def __init__(self, prefix = '', suffix = '', args = {}, transform = False):
+    def __init__(self, prefix = '', suffix = '', args = {}, **kwargs):
         self.prefix = prefix
         self.suffix = suffix
-        self.transform = transform
+        self.transform = kwargs.get('transform', False)
+        self.return_type = kwargs.get('return_type', None)
         self.safeeval = safeeval()
         self.args = args
 
@@ -235,15 +240,27 @@ class Expression(Validator):
         if value == "":
             return value
         try:
+            variables = ', '.join(self.args.keys()) if self.args != None else _('none')
+            msg = _("%(title)s is no valid expression, "
+                    "allowed variables: %(vars)s") % {
+                            'title': title,
+                            'vars': variables }
             result = self.safeeval(self.prefix + value + self.suffix)
 
+            if self.return_type != None:
+                if not isinstance(result, self.return_type):
+                    msg = _("Expression %(title)s returned an invalid type. "
+                            "Expected: %(expected)s, found: %(found)s. Maybe accidently "
+                            "used comma as decimal separator?") % {
+                                    'title': title,
+                                    'expected': self.return_type.__name__,
+                                    'found': type(result).__name__ }
+                    raise TypeError
             # only transform field value if intended
             if self.transform:
                 return result
         except Exception:
-            variables = ', '.join(self.args.keys()) if self.args != None else _('none')
-            raise ValidationError(_("%(title)s is no valid expression, allowed variables: %(vars)s") %
-                    { 'title': title, 'vars': variables })
+            raise ValidationError(msg)
         return value
 
 

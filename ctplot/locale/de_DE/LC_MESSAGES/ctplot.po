@@ -132,6 +132,10 @@ msgstr "%(title)s ist kein gültiger Ausdruck, erlaubte Variablen: %(vars)s"
 msgid "%(title)s has to be greater than or equal to %(value).10g"
 msgstr "%(title)s muss größer als oder gleich %(value).10g sein"
 
+#: validation.py
+msgid "Expression %(title)s returned an invalid type. Expected: %(expected)s, found: %(found)s. Maybe accidently used comma as decimal separator?"
+msgstr "Ergebnis von Ausdruck %(title)s liefert ungültigen Rückgabetyp. Erwartet: %(expected)s, gefunden: %(found)s. Vielleicht fälschlicherweise Komma als Dezimaltrenner verwendet?"
+
 #: wsgi.py
 msgid "width"
 msgstr "Breite"
