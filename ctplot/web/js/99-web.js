@@ -220,14 +220,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             visible = visible.add(options);
             hidden = hidden.add(options.not(plotmode));
 
-            // shift and weight
-            var r = plot.find(':input[name^="rs"], :input[name^="rc"]').parents('label');
-            var windowempty = plot.find(':input[name^="rw"]').val().replace(/\s+/, '') == '';
-            visible = visible.add(r);
-            if (windowempty) {
-                hidden = hidden.add(r);
-            }
-
             // experiment/dataset
             var experiment = '' + plot.find(':input[name^="experiment"]').val();
             console.debug('experiment=' + experiment);
@@ -274,11 +266,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 option.text(vv[1][i]);
                             }
                             dropdown.append(option)
-                        }
-                        if (p.find(':input[name^="rw"]').val().replace(/\s+/, '') != '') {
-                            dropdown.append('<option value="rate">rate</option>');
-                            dropdown.append('<option value="count">count</option>');
-                            dropdown.append('<option value="weight">weight</option>');
                         }
                         return false;
                     }
@@ -360,11 +347,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         // plot mode dropdown box
         plot.find(':input[name^="m"]').change(function() {
-            updateHiddenFields();
-        });
-
-        // rate window field
-        plot.find(':input[name^="rw"]').keyup(function() {
             updateHiddenFields();
         });
 

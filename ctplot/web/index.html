@@ -153,21 +153,6 @@
                                 <label class="advanced" data-help="Hier wird ein boolscher Ausdruck eingegeben. Nur Datentupel, bei denen dieser Ausdruck wahr ist, werden in das Diagramm aufgenommen. z.B. T_a&gt;20 bedeutet, dass nur Daten, bei denen T_a&gt;20 ist, in das Diagramm aufgenommen werden. Alle anderen werden weggeschnitten (gefiltert).">Bedingung
                                     <input type="text" name="c*">
                                 </label>
-                                <h3 class="advanced">Ratenberechnung</h3>
-                                <!--
-                                * TEXT KLARER
-                                * Die Ratenberechnung sollte VOR den Achsen und Variablen erscheinen, da zuerst eine Rate berechnet werden muss, welche anschließend in Achsen und Variablen verwendet werden kann.
-                                * Schub und Gewicht werden angezeigt, wenn ein Fenster angegeben wurde.
-                                -->
-                                <label class="advanced" data-help="Fenster in Sekunden zur Ratenberechnung, die Rate wird durch Zählen von Events in einen festen Zeitfenster berechnet, dies hier legt die Größe dieses Fensters in Sekunden fest, weitere Erklärungen in der Anleitung">Zeitintervall
-                                    <input type="text" name="rw*">
-                                </label>
-                                <label class="advanced" data-help="Anteil des Fensters, um welcher dieses verschoben wird, mögliche Werte aus: (0,1], Standardwert: 1, bei Schub=1 beginnt das jeweils nächste Zeitfenster direkt im Anschluss an der vorhergehende, die Fenster überlappen nicht, bei Schub&lt;1 überlappen die Fenster, das Zeitfenster wird jeweils nur um den angegebenen Anteil weitergeschoben, das Zeitfenster ist gleitend und Events werden mehrfach gezählt">Schub
-                                    <input type="text" name="rs*">
-                                </label>
-                                <label class="advanced" data-help="Ausdruck (Formel), der innerhalb des Zeitfensters gemittelt wird, die Rate ist mittleres Gewicht * Anzahl Events / Zeitfenster, dies erlaubt die Bestimmung der Rate von Event eines bestimmten Typs (z.B. Events mit genau 3 getriggerten Segmenten) oder die Ermittlung von mittleren Größen (z.B. mittlere Multiplizität)">Gewicht
-                                    <input type="text" name="rc*">
-                                </label>
 
                                 <!-- fit options -->
                                 <h3 class="t-xy t-h1 t-p advanced">Fit</h3>
@@ -195,15 +180,6 @@
                                         <option value="splaea" class="expert">süd-polar, Lambert-Azimutal</option>
                                         <option value="spstere" class="expert">süd-polar, stereographisch</option>
                                     </select> </label>
-                                <label data-help="" class="t-map expert">Breite des Ausschnitts
-                                    <input type="text" name="o*width">
-                                </label>
-                                <label data-help="" class="t-map expert">Höhe des Ausschnitts
-                                    <input type="text" name="o*height">
-                                </label>
-                                <label data-help="" class="t-map expert">Grenzbreite für (N/S)-polar
-                                    <input type="text" name="o*boundarylat">
-                                </label>
                                 <label data-help="" class="t-map expert">Landesgrenzen
                                     <input type="checkbox" name="o*drawcountries">
                                 </label>
