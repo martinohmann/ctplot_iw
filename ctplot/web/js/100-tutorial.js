@@ -36,7 +36,6 @@ function scrollTo(element) {
 	if (element == null) {
 		element = $('body');
 	}
-
 	$('body, html').animate({ scrollTop: $(element).offset().top-window.innerHeight*0.4}, 600);
 	window.setTimeout(function () {
 		$('body,html').stop(true,false,true);
@@ -73,11 +72,11 @@ function createNewFrame(newFrame) {
 		}
 
 		if(data.find('textposition').length == 0) {
-			left = defaultData.find('left').html() + "vw";
-			top = defaultData.find('top').html() + "vh";
+			left = defaultData.find('x').html() + "vw";
+			top = defaultData.find('y').html() + "vh";
 		} else {
-			left = data.find('left').html() + "vw";
-			top = data.find('top').html() + "vh";
+			left = data.find('x').html() + "vw";
+			top = data.find('y').html() + "vh";
 		}
 
 		$("#progress").html(headline + " (" + (frameNumber + 1) + " von " + frameQuantity + ")");
@@ -185,9 +184,8 @@ function setup(){
 	$('nav').add(OOI).css('pointer-events', 'auto');
 
 	var tempDiff = (parseFloat($('#textwrapper').css('top'))-parseFloat($('#textwrapper').css('height'))/2)-parseFloat($("#textwrapper").css('padding-top'))*3 - barHeight;
-	if(tempDiff < 0)
-	{
-		console.log("aktiv");
+
+	if (tempDiff < 0) {
 		$('#textwrapper').css({top: parseFloat($('#textwrapper').css('top'))-tempDiff});
 	}
 }
@@ -243,6 +241,9 @@ function userAction(par, td) {
 	else if(par == 27){
 		stopTutorial();
 	}
+	else if(par == 67){
+		localStorage.removeItem('visited');
+	}
 }
 
 function stopTutorial(){
@@ -250,6 +251,7 @@ function stopTutorial(){
 	$('.popup-background').hide();
 	$('#content').css('pointer-events', 'auto');
 	$('nav').removeClass('fixed_tutorial');
+	localStorage.setItem('visited', 'true');
 }
 
 function remindOfTask() {
@@ -263,7 +265,7 @@ function remindOfTask() {
 	}, animationLength * 4);
 }
 
-$(document).ready(function(){
+function startTutorial(){
 	$(document).click(function() {
 		moveExitButton();
 	});
@@ -282,11 +284,6 @@ $(document).ready(function(){
 
 	$(document).keyup(function(e) {
 		userAction(e.which, taskDone());
-	});
-
-	$('.startTutorial').click(function() {
-		$('.tutorial').toggle();
-		redraw();
 	});
 
 	$(window).scroll(function() {
@@ -326,7 +323,7 @@ $(document).ready(function(){
 		}
 	});
 
-	$.get('Frames.html', function(data) {
+	$.get('frames.html', function(data) {
 		var parser = new DOMParser();
 		var xmlDoc = parser.parseFromString(data,"text/xml");
 		frameData = $(xmlDoc);
@@ -335,8 +332,24 @@ $(document).ready(function(){
 		defaultData = frameData.find('default');
 	});
 
-	$('.tutorial').hide();
 	ctx = document.getElementById("overlay").getContext("2d");
 	drawNewFrame();
 	setup();
+	$('.tutorial').show();
+}
+
+$(document).ready(function(){
+	if (!localStorage.visited) {
+		$('.popup-background').show();
+	} else {
+		$(document).keyup(function(e) {
+			if (e.which == 67) {
+				localStorage.removeItem('visited');
+			}
+		});
+	}
+
+	$('.startTutorial').click(function() {
+		startTutorial();
+	});
 });
