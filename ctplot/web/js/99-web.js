@@ -866,6 +866,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     saveButton = $('<button>').attr('type', 'button')
                         .addClass('btn')
                         .attr('title', 'Zu gespeicherten Diagrammen hinzufügen')
+                        .attr('id', 'savePlotButton')
                         .text(' Zu gespeicherten Diagrammen hinzufügen')
                         .prepend('<i class="fa fa-save"></i>');
                     

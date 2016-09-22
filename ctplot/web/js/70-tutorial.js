@@ -87,7 +87,7 @@ function createNewFrame(newFrame) {
 		moveExitButton();
 
 		if (OOI != null) {
-			$(OOI).css('pointer-events', 'none');
+			$(OOI).css('pointer-events', '');
 		}
 
 		OOI = getObjectOfInterest();
@@ -249,7 +249,8 @@ function userAction(par, td) {
 function stopTutorial(){
 	$('.tutorial').hide();
 	$('.popup-background').hide();
-	$('#content').css('pointer-events', 'auto');
+	$('#content').css('pointer-events', '');
+	$('nav').css('pointer-events', '');
 	$('nav').removeClass('fixed_tutorial');
 	localStorage.setItem('visited', 'true');
 }
