@@ -33,7 +33,7 @@ function drawHole(object) {
 }
 
 function scrollTo(element) {
-	if (element == null) {
+	if (element == null || element.length == 0) {
 		element = $('body');
 	}
 	$('body, html').animate({ scrollTop: $(element).offset().top-window.innerHeight*0.4}, 600);
@@ -158,6 +158,20 @@ function getObjectOfInterest() {
 		var data = frameData.find('frame[number=' + frameNumber + ']');
 		var defaultData = frameData.find('default');
 		var OOITemp = data.find("objectOfInterest").html();
+		var t = new Date();
+		var time = t.getTime();
+
+		while(OOITemp != "" && ($(OOITemp).length == 0 || $(OOITemp).length == null))
+		{
+			var t2 = new Date();
+			OOITemp = data.find("objectOfInterest").html();
+			console.log(t.getTime()-time);
+			if(t2.getTime()-time > 1000)
+			{
+				break;
+			}
+		}
+
 		if(OOITemp === "")
 		{
 			OOITemp = defaultData.find("objectOfInterest").html();
@@ -246,7 +260,7 @@ function userAction(par, td) {
 	}
 }
 
-function stopTutorial(){
+function stopTutorial() {
 	$('.tutorial').hide();
 	$('.popup-background').hide();
 	$('#content').css('pointer-events', '');

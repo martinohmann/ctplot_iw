@@ -694,7 +694,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     function addPlotToSaved(settings) {
         console.debug('* add plot to saved');
-        var plotImg = $('<img src="' + settings.url + '" href="' + settings.url + '" title="' + settings.t + '">'),
+        var plotImg = $('<img src="' + settings.url + '" href="' + settings.url + '" title="' + settings.t + '" class="savedPlotImage">'),
             delBtn = $('<i class="del-btn inverse"></i>').attr('title', 'Plot löschen'),
             loadBtn = $('<i class="fa fa-repeat fa-2x icon-green"></i>').attr('title', 'Plot laden'),
             btnContainer = $('<span class="btns">');
@@ -829,7 +829,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     /* add query string to prevent browser
                      * from showing cached image */
                     $('<img>').attr('src', img + '?t=' + new Date().getTime())
-                        .attr('alt', query).appendTo(result);
+                        .attr('alt', query).attr('id', 'plotImage').appendTo(result);
 
                     /* container for saveButton and image links */
                     container = $('<fieldset class="actions">').appendTo(result);
