@@ -242,7 +242,7 @@ function userAction(par, td) {
 		stopTutorial();
 	}
 	else if(par == 67){
-		localStorage.removeItem('visited');
+		localStorage.delteKey('visited');
 	}
 }
 
@@ -252,7 +252,7 @@ function stopTutorial(){
 	$('#content').css('pointer-events', '');
 	$('nav').css('pointer-events', '');
 	$('nav').removeClass('fixed_tutorial');
-	localStorage.setItem('visited', 'true');
+	simpleStorage.set('visited', 'true');
 }
 
 function remindOfTask() {
@@ -324,14 +324,14 @@ function startTutorial(){
 		}
 	});
 
-	$.get('frames.html', function(data) {
+	$.get('frames.html',"", function(data) {
 		var parser = new DOMParser();
 		var xmlDoc = parser.parseFromString(data,"text/xml");
 		frameData = $(xmlDoc);
 		frameDataLoaded = true;
 		frameQuantity = frameData.find('frame').length;
 		defaultData = frameData.find('default');
-	});
+	},'html');
 
 	ctx = document.getElementById("overlay").getContext("2d");
 	drawNewFrame();
@@ -340,12 +340,12 @@ function startTutorial(){
 }
 
 $(document).ready(function(){
-	if (!localStorage.visited) {
+	if (typeof simpleStorage.get('visited') != 'string') {
 		$('.popup-background').show();
 	} else {
 		$(document).keyup(function(e) {
 			if (e.which == 67) {
-				localStorage.removeItem('visited');
+				simpleStorage.deleteKey('visited');
 			}
 		});
 	}
