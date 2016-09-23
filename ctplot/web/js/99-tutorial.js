@@ -34,8 +34,13 @@ function drawHole(object) {
 
 function scrollTo(element) {
 	if (element == null || element.length == 0) {
-		element = $('body');
+		return;
 	}
+
+	if (element.length > 1) {
+		element = $(element[0]);
+	}
+
 	$('body, html').animate({ scrollTop: $(element).offset().top-window.innerHeight*0.4}, 600);
 	window.setTimeout(function () {
 		$('body,html').stop(true,false,true);
@@ -96,9 +101,7 @@ function createNewFrame(newFrame) {
 			scrollTo(OOI);
 		}
 
-		if(data.find('objectOfInterest').attr('button') === "true"){
-			listenerActive = true;
-		}
+		listenerActive = (data.find('objectOfInterest').attr('button') === "true");
 
 		if(OOI != null && listenerActive){
 			OOI.click(function(e){
@@ -106,13 +109,25 @@ function createNewFrame(newFrame) {
 				userAction(39,true);
 			});
 		}
+
+		console.log(data.find('objectOfInterest').attr('locked'));
+		if (data.find('objectOfInterest').attr('locked') === "true") {
+			$(OOI).css('pointer-events', 'none');
+		} else if (data.find('objectOfInterest').attr('locked') === '') {
+			if (defaultData.find('objectOfInterest').attr('locked') === "true") {
+				$(OOI).css('pointer-events', 'none');
+			} else {
+				$(OOI).css('pointer-events', 'auto');
+			}
+		} else {
+			$(OOI).css('pointer-events', 'auto');
+		}
 	}
 
 	if (OOI != null) {
 		drawHole(OOI);
 	}
 
-	$(OOI).css('pointer-events', 'auto');
 	moveExitButton();
 }
 
@@ -128,19 +143,27 @@ function taskDone() {
 	var textboxTemp = data.find('objectOfInterest').attr('textbox');
 	var TDTemp = data.find("taskDoneValue").html();
 
+	if (buttonTemp === '') {
+		buttonTemp = defaultData.find('objectOfInterest').attr('button');
+	}
+
+	if (textboxTemp === '') {
+		textboxTemp = defaultData.find('objectOfInterest').attr('textbox');
+	}
+
 	if (buttonTemp === "false" && textboxTemp === "false") {
 
 		if (TDTemp === "") {
-			TDTemp = null;
+			return true;
 		}
 
 		if (frameData != null && TDTemp != null) {
-			return getObjectOfInterest().val() == TDTemp;
+			return $(OOI[0]).val() == TDTemp;
 		} else {
 			return true;
 		}
-	}else if(textboxTemp === "true"){
-		if(getObjectOfInterest().val() != "")
+	} else if(textboxTemp === "true") {
+		if($(OOI[0]).val() != "")
 		{
 			return true;
 		}
@@ -149,6 +172,7 @@ function taskDone() {
 			return false;
 		}
 	} else {
+		console.log('You should not set button and textbox true.')
 		return false;
 	}
 }
@@ -158,49 +182,53 @@ function getObjectOfInterest() {
 		var data = frameData.find('frame[number=' + frameNumber + ']');
 		var defaultData = frameData.find('default');
 		var OOITemp = data.find("objectOfInterest").html();
-		var t = new Date();
-		var time = t.getTime();
+		var startDate = new Date();
+		var startTime = startDate.getTime();
 
-		while(OOITemp != "" && ($(OOITemp).length == 0 || $(OOITemp).length == null))
-		{
-			var t2 = new Date();
-			OOITemp = data.find("objectOfInterest").html();
-			console.log(t.getTime()-time);
-			if(t2.getTime()-time > 1000)
-			{
-				break;
-			}
+		if (OOITemp != "" && ($(OOITemp).length == 0 || $(OOITemp).length == null)) {
+			var counter = 0;
+			var id = window.setInterval(function(){
+				if ($(OOITemp).length != 0) {
+					window.clearInterval(id);
+				} else if (counter > 400) {
+					window.clearInterval(id);
+				}
+
+				counter++;
+			}, 50);
 		}
 
-		if(OOITemp === "")
-		{
+		if (OOITemp === "") {
 			OOITemp = defaultData.find("objectOfInterest").html();
+			console.log(OOITemp);
 		}
-		return $('body').find(OOITemp);
+
+		return $(OOITemp);
 	} else {
 		return null;
 	}
 }
 
 function setup(){
-	barHeight = $('#navigation')[0].getBoundingClientRect().height;
+	if ($('.tutorial:hidden').length == 0) {
+		barHeight = $('#navigation')[0].getBoundingClientRect().height;
 
-	$("#overlay").css("top", barHeight).css('height', window.innerHeight - barHeight);
+		$("#overlay").css("top", barHeight).css('height', window.innerHeight - barHeight);
 
-	ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	ctx.canvas.height = window.innerHeight - barHeight;
-	ctx.canvas.width = window.innerWidth;
-	ctx.fillStyle = "rgba(0,0,0,0.5)";
-	ctx.fillRect(0,0,window.innerWidth,window.innerHeight);
-	ctx.fillStyle = "rgba(255,255,255,1)";
+		ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		ctx.canvas.height = window.innerHeight - barHeight;
+		ctx.canvas.width = window.innerWidth;
+		ctx.fillStyle = "rgba(0,0,0,0.5)";
+		ctx.fillRect(0,0,window.innerWidth,window.innerHeight);
+		ctx.fillStyle = "rgba(255,255,255,1)";
+		$('#content').css('pointer-events', 'none');
+		$('nav').add(OOI).css('pointer-events', 'auto');
 
-	$('#content').css('pointer-events', 'none');
-	$('nav').add(OOI).css('pointer-events', 'auto');
+		var tempDiff = (parseFloat($('#textwrapper').css('top'))-parseFloat($('#textwrapper').css('height'))/2)-parseFloat($("#textwrapper").css('padding-top'))*3 - barHeight;
 
-	var tempDiff = (parseFloat($('#textwrapper').css('top'))-parseFloat($('#textwrapper').css('height'))/2)-parseFloat($("#textwrapper").css('padding-top'))*3 - barHeight;
-
-	if (tempDiff < 0) {
-		$('#textwrapper').css({top: parseFloat($('#textwrapper').css('top'))-tempDiff});
+		if (tempDiff < 0) {
+			$('#textwrapper').css({top: parseFloat($('#textwrapper').css('top'))-tempDiff});
+		}
 	}
 }
 
@@ -241,12 +269,16 @@ function userAction(par, td) {
 	if (par == 37 && frameNumber > 0) {
 		frameNumber--;
 		drawNewFrame();
-	} else if(par == 39 && frameNumber < frameQuantity - 1) {
-		if (td) {
-			frameNumber++;
-			drawNewFrame();
+	} else if(par == 39) {
+		if (frameNumber < frameQuantity - 1) {
+			if (td) {
+				frameNumber++;
+				drawNewFrame();
+			} else {
+				remindOfTask();
+			}
 		} else {
-			remindOfTask();
+			stopTutorial();
 		}
 	} else if(par == 71) {
 		frameNumber++;
@@ -256,7 +288,7 @@ function userAction(par, td) {
 		stopTutorial();
 	}
 	else if(par == 67){
-		localStorage.delteKey('visited');
+		localStorage.deleteKey('visited');
 	}
 }
 

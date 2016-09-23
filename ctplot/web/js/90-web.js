@@ -834,7 +834,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     /* container for saveButton and image links */
                     container = $('<fieldset class="actions">').appendTo(result);
                     $('<legend>Plot</legend>').appendTo(container);
-                    left = $('<div class="left">').appendTo(container);
+                    left = $('<div class="left" id="downloadButtons">').appendTo(container);
                     left.append('Diagramm herunterladen als:');
                     right = $('<div class="right">').appendTo(container);
                     list = $('<ul>').appendTo(left);

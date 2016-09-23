@@ -7,7 +7,7 @@
 		<headline></headline>
 		<explanation></explanation>
 		<task></task>
-		<objectOfInterest button="false" textbox="false"></objectOfInterest>
+		<objectOfInterest button="false" textbox="false" locked="false"></objectOfInterest>
 		<taskDoneValue></taskDoneValue>
 	</default>
 
@@ -48,7 +48,7 @@
 	Diagramm erstellen: Experiment
 </headline>
 <explanation>
-	Hier kannst du das Experiment auswählen, auf dessen Datensätze du zugreifen möchtest. Erklärungen zu den einzelnen Experimente findest du <label for="checkbox_experiments" style="pointer-events: auto; padding: 0; margin: 0;">hier</label>.
+	Mit dieser Funktion kannst du das Experiment auswählen, auf dessen Datensätze du zugreifen möchtest. Erklärungen zu den einzelnen Experimente findest du <label for="checkbox_experiments" style="pointer-events: auto; padding: 0; margin: 0;">hier</label>.
 	<input type="checkbox" style="display: none;" name="checkbox_experiments" id="checkbox_experiments" />
 	<ul>
 		<li><a href="https://physik-begreifen-zeuthen.desy.de/angebote/kosmische_teilchen/cosmicweb/trigger_hodoskop/index_ger.html" target="_blank">Informationen zum Trigger-Hodoskop</a></li>
@@ -88,7 +88,7 @@
 	Nun kann ein geeignetes Diagramm für die Darstellung der Daten ausgesucht werden. Man unterscheidet vier verschiedene Diagrammtypen:
 	<ol>
 		<li>
-			<b>1D-Histogramm:</b> Ermöglicht die grafische Darstellung einer einzelnen Variablen. Auf der x-Achse wird die Variable, auf der y-Achse deren Häufigkeit dargestellt. (Anmerkung: Hier macht Zeit als Variable keinen Sinn.)
+			<b>1D-Histogramm:</b> Ermöglicht die grafische Darstellung einer einzelnen Variablen. Auf der x-Achse wird die Variable, auf der y-Achse deren Häufigkeit dargestellt.
 		</li>
 		<li>
 			<b>xy-Diagramm:</b> Damit kann die Abhängigkeit einer Variablen von einer anderen dargestellt werden, so wie man es aus der Schule kennt.
@@ -100,7 +100,7 @@
 			<b>Karte:</b> Darstellung der geographischen Koordinaten der Polarstern. Optional kann eine weitere Variable in Abhängigkeit der Koordinaten farblich skaliert dargestellt werden. <br />Hinweis: Bei dieser Darstellungsform sind nur die Variablen Longitude und Latitude als x- bzw. y-Variable sinnvoll.
 		</li>
 		<li>
-			<b>Profil:</b> Dieser Diagramtyp wird hauptsächlich im Expertenmodus verwendet, wird zur Vollständigkeit aber aufgelistet.
+			<b>Profil:</b> Dieser Diagramtyp wird hauptsächlich im Expertenmodus verwendet, wird zur Vollständigkeit aber aufgelistet. Informationen dazu findest du <a href = 'https://physik-begreifen-zeuthen.desy.de/angebote/kosmische_teilchen/cosmicweb/wiki/#submenu020' target = 'blank_'>hier</a>.
 		</li>
 	</ol>
 </explanation>
@@ -116,13 +116,13 @@
 	Diagramm erstellen: X-Variable
 </headline>
 <explanation>
-	Hier kann ausgewählt werden, welche gemessene Größe auf der x-Achse abgetragen werden soll. (Achtung: Es muss ein Datensatz ausgewählt sein!)
+	Hier kann ausgewählt werden, welche gemessene Größe auf der x-Achse abgetragen werden soll.
 	<p>Beschreibungen und Erklärungen zu den jeweiligen Variablenarten findest du <a href='https://physik-begreifen-zeuthen.desy.de/angebote/kosmische_teilchen/cosmicweb/wiki/#Achsen' target="_blank">hier</a>.</p><!-- TODO -->
-	<p>Eine Beschreibung und Erklärung der vorhandenen Daten zu jedem Experiment findest du auf der Unterseite zu diesem unter dem Punkt Datenstruktur. <br />
+	<p>Eine Beschreibung und Erklärung der vorhandenen Daten zu jedem Experiment findest du auf der jeweiligen Unterseite unter dem Punkt Datenstruktur. <br />
 		<a href='https://physik-begreifen-zeuthen.desy.de/e2198/e203474/e203596/e204023/index_ger.html' target='_blank'>Beispiel Polarstern </a></p><!--TODO-->
 </explanation>
 <task>
-In unserem Beispiel soll die Rate gemessener Myonen im zeitlichen Verlauf untersucht werden. Daher wähle als x-Variable time [s] aus.
+	In unserem Beispiel soll die Rate gemessener Myonen im zeitlichen Verlauf untersucht werden. Daher wähle als x-Variable time [s] aus.
 </task>
 <objectOfInterest button="false" textbox="false">select[name=x0]</objectOfInterest>
 <taskDoneValue>time</taskDoneValue>
@@ -133,7 +133,7 @@ In unserem Beispiel soll die Rate gemessener Myonen im zeitlichen Verlauf unters
 	Diagramm erstellen: Y-Variable
 </headline>
 <explanation>
-	Hier können die möglichen Variableneinstellungen für die Y-Variable festgelegt werden. Anmerkung: Es ist darüber hinaus möglich eine dritte Variable, die Z-Variable, zu definieren.
+	Hier kann die Y-Variable ausgesucht werden. Anmerkung: Es ist darüber hinaus möglich eine dritte Variable, die Z-Variable, zu definieren.
 </explanation>
 <task>
 	Wähle mu_rate [1/h] aus. Dies zeigt die Anzahl der gemessenen Myonen pro Stunde an.
@@ -185,7 +185,7 @@ In unserem Beispiel soll die Rate gemessener Myonen im zeitlichen Verlauf unters
 	Diagramm
 </headline>
 <explanation>
-	Wenn dir nicht klar ist, was auf den Achsen abgetragen ist, prüfe zunächst, was im Datensatz enthalten ist. So wird in diesem Fall die Zeit in Sekunden (time[s]) angegeben, deren Maßzahl jedoch um den Faktor 10⁸ vergrößert wurde (1e8).
+	Wenn dir nicht klar ist, was auf den Achsen abgetragen ist, prüfe zunächst, was im Datensatz enthalten ist. So wird in diesem Fall die Zeit in Sekunden (time[s]) ab dem 01.01.2011 angegeben. Weitere Informationen zur Umrechnung findest du unter der <a href='https://physik-begreifen-zeuthen.desy.de/e2198/e203474/e203596/e204023/index_ger.html#e222540' target='blank_'>Datenstruktur</a>.
 </explanation>
 <task></task>
 <objectOfInterest button="false" textbox="false">#plotImage</objectOfInterest>
@@ -194,91 +194,61 @@ In unserem Beispiel soll die Rate gemessener Myonen im zeitlichen Verlauf unters
 
 <frame number="11">
 <headline>
-	Diagramm
+	Plot speichern
 </headline>
 <explanation>
-	Die Zeitmessung beginnt bei dem Polarsternexperiment am 01.01.2011 um 00:00:00. Die in unserem Diagramm dargestellte Zeit ist gleich der seit diesem Zeitpunkt verstrichenen Anzahl an Sekunden. Um diese Messung in einem für uns besser verständlichen Datum angeben zu können, wird diese Zahl <a href='https://physik-begreifen-zeuthen.desy.de/e2198/e203474/e203596/e204023/index_ger.html#e222540' target='blank'>hier</a> umgerechnet.
+	Es gibt mehrere Möglichkeiten, Diagramme speichern und wieder aufrufen zu können:
+	<ol>
+		<li>Eine Möglichkeit ist es, sich die Diagramme in den Formaten "pdf,svg oder png" herunterzuladen.
+		</li>
+	</ol>
 </explanation>
 <task></task>
-<objectOfInterest button="false" textbox="false"></objectOfInterest>
+<objectOfInterest button="false" textbox="false">.downloadButtons</objectOfInterest>
 <taskDoneValue></taskDoneValue>
 </frame>
 
 <frame number="12">
 <headline>
-	Plot
+	Plot speichern
 </headline>
 <explanation>
 	Es gibt mehrere Möglichkeiten, Diagramme speichern und wieder aufrufen zu können:
 	<ol>
-		<li>Indem man die hier dargestellten Settings beispielsweise als externe Textdatei speichert, kann man durch Kopieren in das untere Feld das Diagramm erneut laden.
+		<li>Eine Möglichkeit ist es, sich die Diagramme in den Formaten "pdf,svg oder png" herunterzuladen.
+		</li>
+		<li>Indem man die hier dargestellten Einstellungen beispielsweise als externe Textdatei speichert, kann man durch Kopieren in das untere Feld das Diagramm erneut laden.
 		</li>
 	</ol>
 </explanation>
 <task></task>
-<objectOfInterest button="false" textbox="false">#plotsettings</objectOfInterest>
+<objectOfInterest button="false" textbox="false">#plotsettings,#loadsettings</objectOfInterest>
 <taskDoneValue></taskDoneValue>
 </frame>
 
 <frame number="13">
 <headline>
-	Plot
+	Plot speichern
 </headline>
 <explanation>
 	Es gibt mehrere Möglichkeiten, Diagramme speichern und wieder aufrufen zu können:
 	<ol>
+		<li>Eine Möglichkeit ist es, sich die Diagramme in den Formaten "pdf,svg oder png" herunterzuladen.
+		</li>
 		<li>Indem man die hier dargestellten Einstellungen beispielsweise als externe Textdatei speichert, kann man durch kopieren in das untere Feld das Diagramm erneut laden.
 		</li>
 		<li>Mithilfe der Session-ID, welche das Tutorial in den nächsten Schritten erklären wird.</li>
 	</ol>
 </explanation>
 <task></task>
-<objectOfInterest button="false" textbox="false">#plotsettings</objectOfInterest>
+<objectOfInterest button="false" textbox="false">#session</objectOfInterest>
 <taskDoneValue></taskDoneValue>
 </frame>
 
 <frame number="14">
-<headline>
-	Sessioneinstellungen
-</headline>
-<explanation>
-	Hier kann man eine eigene Session-ID festlegen. Mit Hilfe dieser können Diagramme abgespeichert werden. Die Session-ID bleibt auch dann erhalten, wenn man den Browser schließt. Hierbei ist zu beachten, dass man nur eine neue ID wählen sollte, wenn ein neues Projekt gestartet wird.
-</explanation>
-<task></task>
-<objectOfInterest button="false" textbox="false">#sessionid</objectOfInterest>
-<taskDoneValue></taskDoneValue>
-</frame>
-
-<frame number="15">
-<headline>
-	Sessioneinstellungen
-</headline>
-<explanation>
-	Es wird empfohlen eine persönliche ID auszuwählen, hierbei ist aber zu beachten, dass alle darunter gespeicherte Diagramme von jeglichen Besuchern der Webseite angesehen und verändert werden können, weshalb es sich empfiehlt eine ausführliche ID zu wählen.
-</explanation><!--TODO-->
-<task>
-	Wähle deine erste ID.
-</task>
-<objectOfInterest button="false" textbox="true">#sessionid</objectOfInterest>
-<taskDoneValue></taskDoneValue>
-</frame>
-
-<frame number="16">
-<headline>
-	Sessioneinstellungen
-</headline>
-<explanation></explanation>
-<task>
-	Klicke auf neue ID.
-</task>
-<objectOfInterest button="true" textbox="false">#newid</objectOfInterest>
-<taskDoneValue></taskDoneValue>
-</frame>
-
-<frame number="17">
 <textposition>
-			<x>25</x>
-			<y>40</y>
+	<x>25</x>
+	<y>40</y>
 </textposition>
 <headline>
 	Plot
@@ -293,31 +263,31 @@ In unserem Beispiel soll die Rate gemessener Myonen im zeitlichen Verlauf unters
 <taskDoneValue></taskDoneValue>
 </frame>
 
-<frame number="18">
+<frame number="15">
 <headline>
 	Gespeicherte Diagramme
 </headline>
 <explanation>
-	Nun ist hier eine Vorschau des Diagramms erschienen, mit einem Klick darauf kannst du das Bild vergrößern.
+	Hier siehst du, welche Diagramme du unter deiner Session-ID gespeichert hast.
 </explanation>
 <task></task>
-<objectOfInterest button="false" textbox="false">.savedPlotImage</objectOfInterest>
+<objectOfInterest button="false" textbox="false" locked="true">.savedPlotImage</objectOfInterest>
 <taskDoneValue></taskDoneValue>
 </frame>
 
-<frame number="19">
+<frame number="16">
 <headline>
 	Gespeicherte Diagramme
 </headline>
 <explanation>
-	Mit diesen beiden Buttons kannst du das Diagramm öffnen oder löschen.
+	Mit diesen beiden Buttons kannst du das Diagramm laden oder löschen.
 </explanation>
 <task></task>
-<objectOfInterest button="false" textbox="false">.btns</objectOfInterest>
+<objectOfInterest button="false" textbox="false" locked="true">.btns</objectOfInterest>
 <taskDoneValue></taskDoneValue>
 </frame>
 
-<frame number="20">
+<frame number="17">
 <headline>
 	Ende
 </headline>
