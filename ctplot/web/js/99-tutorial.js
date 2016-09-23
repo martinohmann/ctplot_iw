@@ -34,6 +34,7 @@ function drawHole(object) {
 
 function scrollTo(element) {
 	if (element == null || element.length == 0) {
+		console.log("Not scrolling");
 		return;
 	}
 
@@ -110,7 +111,6 @@ function createNewFrame(newFrame) {
 			});
 		}
 
-		console.log(data.find('objectOfInterest').attr('locked'));
 		if (data.find('objectOfInterest').attr('locked') === "true") {
 			$(OOI).css('pointer-events', 'none');
 		} else if (data.find('objectOfInterest').attr('locked') === '') {
@@ -187,10 +187,10 @@ function getObjectOfInterest() {
 		if (OOITemp != "" && ($(OOITemp).length == 0 || $(OOITemp).length == null)) {
 			var counter = 0;
 			var id = window.setInterval(function(){
-				if ($(OOITemp).length != 0) {
+				if ($(OOITemp).length != 0 || counter > 400) {
 					window.clearInterval(id);
-				} else if (counter > 400) {
-					window.clearInterval(id);
+					OOI = $(OOITemp);
+					redraw();
 				}
 
 				counter++;
@@ -221,7 +221,7 @@ function setup(){
 		ctx.fillRect(0,0,window.innerWidth,window.innerHeight);
 		ctx.fillStyle = "rgba(255,255,255,1)";
 		$('#content').css('pointer-events', 'none');
-		$('nav').add(OOI).css('pointer-events', 'auto');
+		$('nav').css('pointer-events', 'auto');
 
 		var tempDiff = (parseFloat($('#textwrapper').css('top'))-parseFloat($('#textwrapper').css('height'))/2)-parseFloat($("#textwrapper").css('padding-top'))*3 - barHeight;
 
