@@ -172,7 +172,6 @@ function taskDone() {
 			return false;
 		}
 	} else {
-		console.log('You should not set button and textbox true.')
 		return false;
 	}
 }
