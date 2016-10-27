@@ -387,12 +387,6 @@ function startTutorial(){
 $(document).ready(function(){
 	if (typeof simpleStorage.get('visited') != 'string') {
 		$('.popup-background').show();
-	} else {
-		$(document).keyup(function(e) {
-			if (e.which == 67) {
-				simpleStorage.deleteKey('visited');
-			}
-		});
 	}
 
 	$('.startTutorial').click(function() {
