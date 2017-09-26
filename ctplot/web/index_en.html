@@ -25,7 +25,15 @@
 	<link rel="stylesheet" type="text/css" href="colorbox.css" />
 	<link rel="stylesheet" type="text/css" href="style.css" />
 	<link rel="stylesheet" type="text/css" href="tutorial.css" />
-	<script src="js"></script>
+	<script src="js/00-browser-update.js"></script>
+	<script src="js/05-jquery.js"></script>
+	<script src="js/10-jquery.smooth-scroll.js"></script>
+	<script src="js/20-jquery.cookie.js"></script>
+	<script src="js/30-jquery.colorbox.js"></script>
+	<script src="js/40-simplestorage.js"></script>
+	<script src="js/50-colorpicker.js"></script>
+	<script src="js/90-web_en.js"></script>
+	<script src="js/99-tutorial.js"></script>
     </head>
     <body>
         <!--
@@ -135,7 +143,7 @@
 	                        <legend>
 	                            *. Data Set
 	                        </legend>
-	                        <!--<span class="fa fa-close fa-2x icon-red delplot" title="hier klicken, um diese Diagrammeinstellungen zu entfernen"></span>-->
+	                        <!--<span class="fa fa-close fa-2x icon-red delplot" title="Click here to remove the Diagram Settings"></span>-->
 	                        <span class="del-btn delplot" title="Click here to remove the diagram settings"></span>
 	                        <h2>Choose Data Set</h2>
 	                        <label class="advanced" data-help="Title of the diagram, will be shown in diagram's legend">Diagram Title
@@ -186,7 +194,7 @@
 	                        <label data-help="Correction function of the z-variable" class="t-xy t-map expert">Correction Function for z-Variable
 	                            <input type="text" name="z*a">
 	                        </label>
-	                        <h2 class="advanced">Data Anlysis</h2>
+	                        <h2 class="advanced">Data Analysis</h2>
 	                        <h3 class="advanced" >Data Reduction</h3>
 
 	                        <label class="advanced" data-help="Data selection/reduction with help of a boolean condition. Only data for which the condition is true will be displayed, (e.g. T_a&gt;20 means that all data are cut for which this condition is not fulfilled.">Condition
@@ -312,7 +320,7 @@
 	                    </fieldset>
 	                    <button type="button" id="addplot" class="btn" title="Click to open an additional diagram">
 	                      <i class="fa fa-plus-square"></i>
-	                      Add Data Set
+	                      Add Data Array
 	                    </button>
 	                </div>
 
@@ -425,7 +433,7 @@
 	                    <h2>Legend</h2>
 	                    <label data-help="Defines the position of the legend. In case of 1 diagram only, there is no legend displayd">Position
 	                        <select name="l">
-	                            <option value="">automatisch</option>
+	                            <option value="">automatically</option>
 	                            <option value="none">no legend</option>
 	                            <option value="upper left">top left</option>
 	                            <option value="upper center">top center </option>
@@ -469,15 +477,14 @@
 	                Clicking on the diagram will diplay it in full size.
 	            </p>
 	            <p id="nosavedplots">
-	                No stored diagrams available.
+	                No stored diagrams available for you.
 	            </p>
 	            <div id="savedplots"></div>
 	        </div>
 	        <div id="loadsettings">
 	            <h1>Load Settings</h1>
 	            <p>
-	                To load stored settings you must copy it into this field and click then
-			Load Settings
+	                To load stored settings you must copy it into this field and click then Load Settings
 	            </p>
 	            <p>
 	                <textarea name="settingstoload"></textarea>
@@ -492,9 +499,7 @@
 	        <div id="session">
 	            <h1>Session ID</h1>
 			<p>
-			  The diagrams and their settings can be stored at the server for 4 weeks. 
-			  The identification is realized by a Session ID. With this ID they can be 
-			  called back.
+			  The diagrams and their settings can be stored at the server for 4 weeks. The identification is realized by a Session ID. With this ID they can be called back.
 			</p>
 			<p>
 	                <label>Session-ID
@@ -510,19 +515,34 @@
 	                </button>
 			</p>
 		        <p>
-			  You can define your own Session ID. The ID should consist of 8 or more characters. 
+			  You can define your own Session ID. The ID should consist of 8 or more characters, click then on 'Load Session'.
 			</p>
 		        <p>
 			  If you want to store a diagram into the session, click on:
-			  "Add to stored diagrams".
+			  'Add to stored diagrams'.
 			</p>
 		        <p>
 			  Remember the Session ID for future work.
 			</p>
 		        <p>
-			  If you want to load a Session, click on "Load Session". Then you can choose a 
-			  diagram to modify the settings by clicking on the green arrow.
+			  If you want to load a Session, click on 'Load Session'. Then you can choose a diagram to modify the settings by clicking on the green arrow.
 			</p>
+                    <h1>Example Diagrams</h1>
+                    <p>
+		      To load the example diagrams given in the manual for each experiment, choose on of the following Session-ID's:
+		    </p>  
+                    <ul>
+                     <li>Trigger-Hodoskop</li>
+                     <li>CosMo-Muehle</li>
+		     <li>LIDO</li>
+		     <li>Polarstern</li>
+		     <li>Neumayer</li>
+		     <li>Wetterdaten-Zeuthen</li>
+                    </ul>
+		    <p> 
+		      Then click on 'Load Session'. These example diagrams can be modified. However, they must be stored choosing another, (own) Session-ID, otherwise an error message will appear.
+		    </p>
+
 	        </div>
 	    </div>
 	    <footer>
