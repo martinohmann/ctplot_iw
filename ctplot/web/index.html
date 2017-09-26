@@ -29,9 +29,21 @@
 	<link rel="stylesheet" type="text/css" href="colorbox.css" />
 	<link rel="stylesheet" type="text/css" href="style.css" />
 	<link rel="stylesheet" type="text/css" href="tutorial.css" />
-	<script src="js"></script>
+	<script src="js"></script>  
+<!--
+	<script src="js/00-browser-update.js"></script>
+	<script src="js/05-jquery.js"></script>
+	<script src="js/10-jquery.smooth-scroll.js"></script>
+	<script src="js/20-jquery.cookie.js"></script>
+	<script src="js/30-jquery.colorbox.js"></script>
+	<script src="js/40-simplestorage.js"></script>
+	<script src="js/50-colorpicker.js"></script>
+	<script src="js/90-web.js"></script>
+	<script src="js/99-tutorial.js"></script>
+-->
     </head>
     <body>
+        <!--
     	<div class="popup-background" style="display: none;">
 		<div class="popup">
 			Möchtest du das Tutorial starten? <br /> Es hilft dir beim Einstieg und nimmt maximal 5-10  Minuten deiner Zeit in Anspruch.
@@ -64,6 +76,7 @@
 			<p id="task"></p>
 		</div>
 	</div>
+	-->
 	<header>
 	    <img src="img/cosmiclab.png" alt="COSMICLAB" />
 	</header>
@@ -100,9 +113,11 @@
 	            Chromium/Google Chrome optimiert. Eine fehlerfreie Funktion
 	            kann unter anderen Browsern nicht garantiert werden!
 	        </div>
+
 		<div align="right">
 	            Language: <a href="index_en.html">English</a> / <b>German</b>
 	        </div>
+
 	        <p>
 	          <a class="internal-link" href="https://physik-begreifen-zeuthen.desy.de/angebote/kosmische_teilchen/cosmicweb" target="_blank">
 	            Mehr Informationen zu Cosmic@Web
@@ -485,8 +500,7 @@
 	        <div id="loadsettings">
 	            <h1>Einstellungen laden</h1>
 	            <p>
-	                Zum Laden von gespeicherten Einstellungen, die Einstellungen in
-	                dieses Feld kopieren und laden.
+	                Zum Laden von gespeicherten Einstellungen, die Einstellungen in dieses Feld kopieren und laden.
 	            </p>
 	            <p>
 	                <textarea name="settingstoload"></textarea>
@@ -500,10 +514,9 @@
 	        </div>
 	        <div id="session">
 	            <h1>Session ID</h1>
-					<p>
-						Die in dieser Session gewählten Einstellungen und das dazugehörige Diagramm können auf dem Server mittels der Session-ID gespeichert und wieder aufgerufen werden.
-					</p>
-					<p>
+			<p>
+			Die in dieser Session gewählten Einstellungen und das dazugehörige Diagramm können auf dem Server mittels der Session-ID gespeichert und wieder aufgerufen werden.
+			</p>
 	                <label>Session-ID
 	                    <input type="text" id="sessionid">
 	                </label>
@@ -515,23 +528,38 @@
 	                  <i class="fa fa-upload"></i> 
 	                  Session laden
 	                </button>
-	            </p>
-					<p>
-						Es kann auch eine Session-ID selbst gewählt werden. Trage dazu im Feld mindestens 8 Zeichen ein.
-					</p>
-					<p>
+			<p>
+						Es kann auch eine Session-ID selbst gewählt werden. Trage dazu im Feld mindestens 8 Zeichen ein und klicke auf 'Session Laden'.
+			</p>
+			<p>
 						Möchtest du ein Diagramm zu einer Session speichern, klicke auf den Button „Zu gespeicherte Diagramme hinzufügen“.
-					</p>
-					<p>
+			</p>
+			<p>
 						Merke oder speichere dir nun die Session-ID für die spätere Arbeit damit.
-					</p>
-					<p>
+			</p>
+			<p>
 						Wenn du eine Session laden willst, klicke auf Session laden. Wähle dann ein Diagramm aus. Um die Einstellungen zum Diagramm einzusehen oder zu bearbeiten, klicke auf den grünen Pfeil.
-					</p>
+			</p>
+                    <h1>Beispiel-Diagramme</h1>
+                    <p>
+		      Wenn man die in der Anleitung zu jedem Experiment aufgeführten Beispiel-Diagramme laden möchte, dann muss eine der folgenden Session-ID's eingegeben werden:  
+		    </p>  
+                    <ul>
+                     <li>Trigger-Hodoskop</li>
+                     <li>CosMo-Muehle</li>
+		     <li>LIDO</li>
+		     <li>Polarstern</li>
+		     <li>Neumayer</li>
+		     <li>Wetterdaten-Zeuthen</li>
+                    </ul>
+		    <p> 
+		      Anschliessend ein Klick auf 'Session laden'. Diese Beispiel-Diagramme können beliebig modifiziert werden, müssen aber unter einer neuen (eigenen) Session-ID abgespeichert werden, sonst gibt es eine Fehlermeldung.  
+		    </p>
+
 	        </div>
 	    </div>
 	    <footer>
-	        &copy; 2010 &ndash; 2016, Deutsches Elektronen-Synchrotron
+	        &copy; 2010 &ndash; 2017, Deutsches Elektronen-Synchrotron
 	    </footer>
 	</div>
     </body>
