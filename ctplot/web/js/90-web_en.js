@@ -890,7 +890,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     // plot url
                     container.append('<h2>Include this Diagram into a Website</h2>');
                     container.append('<p>The following HTML-Code can be used to include the Diagram into a Website.</p>');
-                    plotUrl = $(location).attr('href').replace(/[#?].*/, '') + 'plot?' + query.replace(/a=plot/, 'a=png');
+
+                    // strip stuff like /index.html from current url and append plot url
+                    var currentUrl = window.location.href;
+                    plotUrl = currentUrl.substr(0, currentUrl.lastIndexOf('/')) + '/plot?' + query.replace(/a=plot/, 'a=png');
+
                     p = $('<p>').appendTo(container);
                     $('<textarea id="ploturl">').text('<img src="' + plotUrl + '" />').appendTo(p);
 

@@ -890,7 +890,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     // plot url
                     container.append('<h2>Diesen Plot auf einer Webseite einbinden</h2>');
                     container.append('<p>Der folgende HTML-Code kann benutzt werden um den Plot auf einer Webseite einzubinden.</p>');
-                    plotUrl = $(location).attr('href').replace(/[#?].*/, '') + 'plot?' + query.replace(/a=plot/, 'a=png');
+
+                    // strip stuff like /index.html from current url and append plot url
+                    var currentUrl = window.location.href;
+                    plotUrl = currentUrl.substr(0, currentUrl.lastIndexOf('/')) + '/plot?' + query.replace(/a=plot/, 'a=png');
+
                     p = $('<p>').appendTo(container);
                     $('<textarea id="ploturl">').text('<img src="' + plotUrl + '" />').appendTo(p);
 
